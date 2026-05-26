@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.3 - PQ priorytet i czas</Title>
+      <Shortcut>alg_pq_czas_63</Shortcut>
+      <Description>Harmonogram z priorytetem i czasem dodania | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class TaskItem
+{
+    public string Description { get; set; }
+    public int Priority { get; set; }
+    public DateTime Timestamp { get; set; }
+
+    public TaskItem(string description, int priority, DateTime timestamp)
+    {
+        Description = description;
+        Priority = priority;
+        Timestamp = timestamp;
+    }
+}
+
+public class TaskPriorityComparer : IComparer<TaskItem>
+{
+    public int Compare(TaskItem x, TaskItem y)
+    {
+        if (x.Priority != y.Priority)
+        {
+            return y.Priority.CompareTo(x.Priority);
+        }
+
+        return x.Timestamp.CompareTo(y.Timestamp);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        PriorityQueue<TaskItem, TaskItem> kolejka =
+            new PriorityQueue<TaskItem, TaskItem>(new TaskPriorityComparer());
+
+        TaskItem t1 = new TaskItem("Sprawozdanie", 2, DateTime.Now);
+        TaskItem t2 = new TaskItem("Kolos", 5, DateTime.Now.AddSeconds(1));
+        TaskItem t3 = new TaskItem("Projekt", 3, DateTime.Now.AddSeconds(2));
+        TaskItem t4 = new TaskItem("Pilne", 5, DateTime.Now.AddSeconds(3));
+        TaskItem t5 = new TaskItem("Notatki", 1, DateTime.Now.AddSeconds(4));
+
+        kolejka.Enqueue(t1, t1);
+        kolejka.Enqueue(t2, t2);
+        kolejka.Enqueue(t3, t3);
+        kolejka.Enqueue(t4, t4);
+        kolejka.Enqueue(t5, t5);
+
+        while (kolejka.Count > 0)
+        {
+            TaskItem task = kolejka.Dequeue();
+            Console.WriteLine($"{task.Description} | priorytet: {task.Priority} | czas: {task.Timestamp}");
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

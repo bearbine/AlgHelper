@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.8 - Kolejka tablica</Title>
+      <Shortcut>alg_kolejka_tab_58</Shortcut>
+      <Description>Kolejka FIFO na tablicy cyklicznej | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+public class ArrayQueue
+{
+    private int[] items;
+    private int front;
+    private int rear;
+    private int count;
+
+    public ArrayQueue(int size)
+    {
+        items = new int[size];
+        front = 0;
+        rear = -1;
+        count = 0;
+    }
+
+    public bool IsEmpty()
+    {
+        return count == 0;
+    }
+
+    public bool IsFull()
+    {
+        return count == items.Length;
+    }
+
+    public void Enqueue(int value)
+    {
+        if (IsFull())
+        {
+            Console.WriteLine("Kolejka jest pelna.");
+            return;
+        }
+
+        rear = (rear + 1) % items.Length;
+        items[rear] = value;
+        count++;
+    }
+
+    public int Dequeue()
+    {
+        if (IsEmpty())
+        {
+            Console.WriteLine("Kolejka jest pusta.");
+            return -1;
+        }
+
+        int value = items[front];
+        front = (front + 1) % items.Length;
+        count--;
+        return value;
+    }
+
+    public int Peek()
+    {
+        if (IsEmpty())
+        {
+            Console.WriteLine("Kolejka jest pusta.");
+            return -1;
+        }
+
+        return items[front];
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        ArrayQueue queue = new ArrayQueue(5);
+
+        queue.Enqueue(10);
+        queue.Enqueue(20);
+        queue.Enqueue(30);
+
+        Console.WriteLine(queue.Peek());
+        Console.WriteLine(queue.Dequeue());
+        Console.WriteLine(queue.Dequeue());
+        Console.WriteLine(queue.Dequeue());
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

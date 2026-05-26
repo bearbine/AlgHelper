@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.3 - Graf skierowany</Title>
+      <Shortcut>alg_graf_directed_73</Shortcut>
+      <Description>BFS i DFS dla grafu skierowanego | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void BFS(Dictionary<string, List<string>> graph, string start)
+    {
+        Queue<string> queue = new Queue<string>();
+        HashSet<string> visited = new HashSet<string>();
+
+        visited.Add(start);
+        queue.Enqueue(start);
+
+        while (queue.Count > 0)
+        {
+            string vertex = queue.Dequeue();
+            Console.Write(vertex + " ");
+
+            foreach (string neighbor in graph[vertex])
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+    }
+
+    static void DFS(Dictionary<string, List<string>> graph, string start)
+    {
+        Stack<string> stack = new Stack<string>();
+        HashSet<string> visited = new HashSet<string>();
+
+        stack.Push(start);
+
+        while (stack.Count > 0)
+        {
+            string vertex = stack.Pop();
+
+            if (!visited.Contains(vertex))
+            {
+                visited.Add(vertex);
+                Console.Write(vertex + " ");
+
+                for (int i = graph[vertex].Count - 1; i >= 0; i--)
+                {
+                    string neighbor = graph[vertex][i];
+
+                    if (!visited.Contains(neighbor))
+                    {
+                        stack.Push(neighbor);
+                    }
+                }
+            }
+        }
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>();
+
+        graph["A"] = new List<string>() { "B", "D" };
+        graph["B"] = new List<string>() { "C" };
+        graph["C"] = new List<string>() { "E" };
+        graph["D"] = new List<string>();
+        graph["E"] = new List<string>() { "D", "F" };
+        graph["F"] = new List<string>();
+
+        BFS(graph, "A");
+        Console.WriteLine();
+        DFS(graph, "A");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

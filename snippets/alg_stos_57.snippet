@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.7 - Stos tablica + lista FULL</Title>
+      <Shortcut>alg_stos_57</Shortcut>
+      <Description>Obie wersje stosu z zadania 5.7 + Main + testy | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+public class ArrayStack
+{
+    private int[] items;
+    private int top;
+
+    public ArrayStack(int size)
+    {
+        items = new int[size];
+        top = -1;
+    }
+
+    public bool IsEmpty()
+    {
+        return top == -1;
+    }
+
+    public void Push(int value)
+    {
+        if (top == items.Length - 1)
+        {
+            Console.WriteLine("Stos tablicowy jest pelny.");
+            return;
+        }
+
+        top++;
+        items[top] = value;
+    }
+
+    public int Pop()
+    {
+        if (IsEmpty())
+        {
+            Console.WriteLine("Stos tablicowy jest pusty.");
+            return -1;
+        }
+
+        int value = items[top];
+        top--;
+        return value;
+    }
+
+    public int Peek()
+    {
+        if (IsEmpty())
+        {
+            Console.WriteLine("Stos tablicowy jest pusty.");
+            return -1;
+        }
+
+        return items[top];
+    }
+}
+
+public class LinkedStack
+{
+    private class Node
+    {
+        public int Value;
+        public Node Next;
+
+        public Node(int value)
+        {
+            Value = value;
+            Next = null;
+        }
+    }
+
+    private Node top;
+
+    public bool IsEmpty()
+    {
+        return top == null;
+    }
+
+    public void Push(int value)
+    {
+        Node newNode = new Node(value);
+        newNode.Next = top;
+        top = newNode;
+    }
+
+    public int Pop()
+    {
+        if (IsEmpty())
+        {
+            Console.WriteLine("Stos listowy jest pusty.");
+            return -1;
+        }
+
+        int value = top.Value;
+        top = top.Next;
+        return value;
+    }
+
+    public int Peek()
+    {
+        if (IsEmpty())
+        {
+            Console.WriteLine("Stos listowy jest pusty.");
+            return -1;
+        }
+
+        return top.Value;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ArrayStack stosTab = new ArrayStack(5);
+        stosTab.Push(1);
+        stosTab.Push(2);
+        stosTab.Push(3);
+
+        Console.WriteLine("STOS NA TABLICY");
+        Console.WriteLine("Peek: " + stosTab.Peek());
+        while (!stosTab.IsEmpty())
+        {
+            Console.WriteLine("Pop: " + stosTab.Pop());
+        }
+
+        LinkedStack stosLista = new LinkedStack();
+        stosLista.Push(1);
+        stosLista.Push(2);
+        stosLista.Push(3);
+
+        Console.WriteLine("\nSTOS NA LISCIE");
+        Console.WriteLine("Peek: " + stosLista.Peek());
+        while (!stosLista.IsEmpty())
+        {
+            Console.WriteLine("Pop: " + stosLista.Pop());
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

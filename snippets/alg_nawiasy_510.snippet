@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.10 - Nawiasy</Title>
+      <Shortcut>alg_nawiasy_510</Shortcut>
+      <Description>Sprawdzanie poprawności nawiasów przez stos | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static bool CzyPoprawneNawiasy(string wyrazenie)
+    {
+        Stack<char> stos = new Stack<char>();
+
+        foreach (char znak in wyrazenie)
+        {
+            if (znak == '(')
+            {
+                stos.Push(znak);
+            }
+            else if (znak == ')')
+            {
+                if (stos.Count == 0)
+                {
+                    return false;
+                }
+
+                stos.Pop();
+            }
+        }
+
+        return stos.Count == 0;
+    }
+
+    static void Main()
+    {
+        Console.Write("Podaj wyrazenie: ");
+        string wyrazenie = Console.ReadLine();
+
+        Console.WriteLine(CzyPoprawneNawiasy(wyrazenie) ? "Poprawne" : "Niepoprawne");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

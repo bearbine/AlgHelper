@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.7 - Prim</Title>
+      <Shortcut>alg_graf_prim_77</Shortcut>
+      <Description>Minimalne drzewo rozpinające przez Prima | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Edge
+{
+    public string From;
+    public string To;
+    public int Weight;
+
+    public Edge(string from, string to, int weight)
+    {
+        From = from;
+        To = to;
+        Weight = weight;
+    }
+}
+
+class Program
+{
+    static List<Edge> Prim(Dictionary<string, List<Edge>> graph, string start)
+    {
+        List<Edge> mst = new List<Edge>();
+        HashSet<string> visited = new HashSet<string>();
+        PriorityQueue<Edge, int> pq = new PriorityQueue<Edge, int>();
+
+        visited.Add(start);
+
+        foreach (Edge edge in graph[start])
+        {
+            pq.Enqueue(edge, edge.Weight);
+        }
+
+        while (pq.Count > 0)
+        {
+            Edge current = pq.Dequeue();
+
+            if (visited.Contains(current.To))
+            {
+                continue;
+            }
+
+            visited.Add(current.To);
+            mst.Add(current);
+
+            foreach (Edge edge in graph[current.To])
+            {
+                if (!visited.Contains(edge.To))
+                {
+                    pq.Enqueue(edge, edge.Weight);
+                }
+            }
+        }
+
+        return mst;
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<Edge>> graph = new Dictionary<string, List<Edge>>();
+
+        graph["A"] = new List<Edge>() { new Edge("A", "B", 4), new Edge("A", "C", 2) };
+        graph["B"] = new List<Edge>() { new Edge("B", "A", 4), new Edge("B", "C", 1), new Edge("B", "D", 5) };
+        graph["C"] = new List<Edge>() { new Edge("C", "A", 2), new Edge("C", "B", 1), new Edge("C", "D", 8), new Edge("C", "E", 10) };
+        graph["D"] = new List<Edge>() { new Edge("D", "B", 5), new Edge("D", "C", 8), new Edge("D", "E", 2) };
+        graph["E"] = new List<Edge>() { new Edge("E", "C", 10), new Edge("E", "D", 2) };
+
+        List<Edge> mst = Prim(graph, "A");
+        int totalCost = 0;
+
+        foreach (Edge edge in mst)
+        {
+            Console.WriteLine($"{edge.From} - {edge.To}, waga: {edge.Weight}");
+            totalCost += edge.Weight;
+        }
+
+        Console.WriteLine("Koszt: " + totalCost);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.log
+*.zip
+publish/
+.DS_Store
+Thumbs.db

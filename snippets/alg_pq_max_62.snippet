@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.2 - PQ max SortedDictionary</Title>
+      <Shortcut>alg_pq_max_62</Shortcut>
+      <Description>Kolejka priorytetowa max przez SortedDictionary | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class MaxPriorityQueue
+{
+    private SortedDictionary<int, Queue<string>> items =
+        new SortedDictionary<int, Queue<string>>(
+            Comparer<int>.Create((a, b) => b.CompareTo(a))
+        );
+
+    public bool IsEmpty()
+    {
+        return items.Count == 0;
+    }
+
+    public void Enqueue(string value, int priority)
+    {
+        if (!items.ContainsKey(priority))
+        {
+            items[priority] = new Queue<string>();
+        }
+
+        items[priority].Enqueue(value);
+    }
+
+    public string Peek()
+    {
+        if (IsEmpty())
+        {
+            throw new InvalidOperationException("Kolejka jest pusta.");
+        }
+
+        foreach (var pair in items)
+        {
+            return pair.Value.Peek();
+        }
+
+        return null;
+    }
+
+    public string Dequeue()
+    {
+        if (IsEmpty())
+        {
+            throw new InvalidOperationException("Kolejka jest pusta.");
+        }
+
+        foreach (var pair in items)
+        {
+            int priority = pair.Key;
+            Queue<string> queue = pair.Value;
+            string value = queue.Dequeue();
+
+            if (queue.Count == 0)
+            {
+                items.Remove(priority);
+            }
+
+            return value;
+        }
+
+        return null;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        MaxPriorityQueue pq = new MaxPriorityQueue();
+
+        pq.Enqueue("A", 2);
+        pq.Enqueue("B", 5);
+        pq.Enqueue("C", 1);
+        pq.Enqueue("D", 5);
+
+        while (!pq.IsEmpty())
+        {
+            Console.WriteLine(pq.Dequeue());
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

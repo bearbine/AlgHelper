@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.1 - PriorityQueue harmonogram</Title>
+      <Shortcut>alg_pq_builtin_61</Shortcut>
+      <Description>Wbudowana kolejka priorytetowa | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        PriorityQueue<string, int> kolejka = new PriorityQueue<string, int>();
+
+        kolejka.Enqueue("Napisac sprawozdanie", 3);
+        kolejka.Enqueue("Przygotowac sie do kolosa", 1);
+        kolejka.Enqueue("Oddac projekt", 2);
+        kolejka.Enqueue("Pilne zgloszenie", 0);
+
+        while (kolejka.Count > 0)
+        {
+            Console.WriteLine(kolejka.Dequeue());
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

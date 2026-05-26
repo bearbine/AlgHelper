@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.6 - Najkrótsze drogi między miastami FULL</Title>
+      <Shortcut>alg_graf_drogi_76</Shortcut>
+      <Description>Dijkstra dla sieci dróg + ścieżki + Main + testy | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Edge
+{
+    public string To;
+    public int Weight;
+
+    public Edge(string to, int weight)
+    {
+        To = to;
+        Weight = weight;
+    }
+}
+
+public class Program
+{
+    static void Dijkstra(
+        Dictionary<string, List<Edge>> graph,
+        string start,
+        out Dictionary<string, int> dist,
+        out Dictionary<string, string> previous)
+    {
+        dist = new Dictionary<string, int>();
+        previous = new Dictionary<string, string>();
+
+        foreach (string city in graph.Keys)
+        {
+            dist[city] = int.MaxValue;
+            previous[city] = null;
+        }
+
+        dist[start] = 0;
+
+        PriorityQueue<string, int> pq = new PriorityQueue<string, int>();
+        pq.Enqueue(start, 0);
+
+        while (pq.Count > 0)
+        {
+            pq.TryDequeue(out string current, out int currentDistance);
+
+            if (currentDistance > dist[current])
+            {
+                continue;
+            }
+
+            foreach (Edge edge in graph[current])
+            {
+                int newDistance = dist[current] + edge.Weight;
+
+                if (newDistance < dist[edge.To])
+                {
+                    dist[edge.To] = newDistance;
+                    previous[edge.To] = current;
+                    pq.Enqueue(edge.To, newDistance);
+                }
+            }
+        }
+    }
+
+    static void PrintPath(Dictionary<string, string> previous, string target)
+    {
+        Stack<string> path = new Stack<string>();
+        string current = target;
+
+        while (current != null)
+        {
+            path.Push(current);
+            current = previous[current];
+        }
+
+        Console.WriteLine(string.Join(" -> ", path));
+    }
+
+    public static void Main()
+    {
+        Dictionary<string, List<Edge>> graph = new Dictionary<string, List<Edge>>();
+
+        graph["Lublin"] = new List<Edge>() { new Edge("Warszawa", 170), new Edge("Rzeszow", 160), new Edge("Kielce", 190) };
+        graph["Warszawa"] = new List<Edge>() { new Edge("Lublin", 170), new Edge("Lodz", 130) };
+        graph["Rzeszow"] = new List<Edge>() { new Edge("Lublin", 160), new Edge("Krakow", 170) };
+        graph["Kielce"] = new List<Edge>() { new Edge("Lublin", 190), new Edge("Krakow", 120), new Edge("Lodz", 160) };
+        graph["Lodz"] = new List<Edge>() { new Edge("Warszawa", 130), new Edge("Kielce", 160), new Edge("Krakow", 210) };
+        graph["Krakow"] = new List<Edge>() { new Edge("Rzeszow", 170), new Edge("Kielce", 120), new Edge("Lodz", 210) };
+
+        Dijkstra(graph, "Lublin", out Dictionary<string, int> dist, out Dictionary<string, string> previous);
+
+        foreach (string city in graph.Keys)
+        {
+            Console.WriteLine("Miasto: " + city + ", dystans: " + dist[city]);
+            Console.Write("Trasa: ");
+            PrintPath(previous, city);
+            Console.WriteLine();
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

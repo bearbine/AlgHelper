@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.6 - Kruskal</Title>
+      <Shortcut>alg_graf_kruskal_76</Shortcut>
+      <Description>Minimalne drzewo rozpinające przez Kruskala | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Edge
+{
+    public string From;
+    public string To;
+    public int Weight;
+
+    public Edge(string from, string to, int weight)
+    {
+        From = from;
+        To = to;
+        Weight = weight;
+    }
+}
+
+public class UnionFind
+{
+    private Dictionary<string, string> parent = new Dictionary<string, string>();
+
+    public void MakeSet(string vertex)
+    {
+        parent[vertex] = vertex;
+    }
+
+    public string Find(string vertex)
+    {
+        if (parent[vertex] != vertex)
+        {
+            parent[vertex] = Find(parent[vertex]);
+        }
+
+        return parent[vertex];
+    }
+
+    public void Union(string a, string b)
+    {
+        string rootA = Find(a);
+        string rootB = Find(b);
+
+        if (rootA != rootB)
+        {
+            parent[rootB] = rootA;
+        }
+    }
+}
+
+class Program
+{
+    static List<Edge> Kruskal(List<string> vertices, List<Edge> edges)
+    {
+        List<Edge> mst = new List<Edge>();
+        UnionFind uf = new UnionFind();
+
+        foreach (string vertex in vertices)
+        {
+            uf.MakeSet(vertex);
+        }
+
+        edges.Sort((a, b) => a.Weight.CompareTo(b.Weight));
+
+        foreach (Edge edge in edges)
+        {
+            if (uf.Find(edge.From) != uf.Find(edge.To))
+            {
+                mst.Add(edge);
+                uf.Union(edge.From, edge.To);
+            }
+        }
+
+        return mst;
+    }
+
+    static void Main()
+    {
+        List<string> vertices = new List<string>() { "A", "B", "C", "D", "E" };
+
+        List<Edge> edges = new List<Edge>()
+        {
+            new Edge("B", "C", 1),
+            new Edge("A", "C", 2),
+            new Edge("D", "E", 2),
+            new Edge("A", "B", 4),
+            new Edge("B", "D", 5),
+            new Edge("C", "D", 8),
+            new Edge("C", "E", 10)
+        };
+
+        List<Edge> mst = Kruskal(vertices, edges);
+        int totalCost = 0;
+
+        foreach (Edge edge in mst)
+        {
+            Console.WriteLine($"{edge.From} - {edge.To}, waga: {edge.Weight}");
+            totalCost += edge.Weight;
+        }
+
+        Console.WriteLine("Koszt: " + totalCost);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

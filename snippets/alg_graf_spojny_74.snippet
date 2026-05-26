@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.4 - Spójność grafu</Title>
+      <Shortcut>alg_graf_spojny_74</Shortcut>
+      <Description>Sprawdzanie spójności grafu przez BFS | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static bool CzySpojny(Dictionary<string, List<string>> graph)
+    {
+        if (graph.Count == 0)
+        {
+            return true;
+        }
+
+        HashSet<string> visited = new HashSet<string>();
+        Queue<string> queue = new Queue<string>();
+
+        string start = null;
+
+        foreach (string vertex in graph.Keys)
+        {
+            start = vertex;
+            break;
+        }
+
+        visited.Add(start);
+        queue.Enqueue(start);
+
+        while (queue.Count > 0)
+        {
+            string vertex = queue.Dequeue();
+
+            foreach (string neighbor in graph[vertex])
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+
+        return visited.Count == graph.Count;
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>();
+
+        graph["A"] = new List<string>() { "B", "C" };
+        graph["B"] = new List<string>() { "A", "D" };
+        graph["C"] = new List<string>() { "A" };
+        graph["D"] = new List<string>() { "B" };
+
+        Console.WriteLine(CzySpojny(graph) ? "Graf jest spojny" : "Graf nie jest spojny");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

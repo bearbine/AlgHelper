@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.6 - HashSet duplikaty</Title>
+      <Shortcut>alg_hashset_duplikaty_56</Shortcut>
+      <Description>Usuwanie duplikatów pracowników po ID | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Pracownik
+{
+    public string Imie;
+    public string Nazwisko;
+    public int ID;
+
+    public Pracownik(string imie, string nazwisko, int id)
+    {
+        Imie = imie;
+        Nazwisko = nazwisko;
+        ID = id;
+    }
+
+    public void Wyswietl()
+    {
+        Console.WriteLine($"{ID}: {Imie} {Nazwisko}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        List<Pracownik> pracownicy = new List<Pracownik>()
+        {
+            new Pracownik("Jan", "Kowalski", 1),
+            new Pracownik("Adam", "Nowak", 2),
+            new Pracownik("Piotr", "Zielinski", 1),
+            new Pracownik("Anna", "Wisniewska", 3),
+            new Pracownik("Marek", "Lis", 2)
+        };
+
+        HashSet<int> uzyteId = new HashSet<int>();
+        List<Pracownik> bezDuplikatow = new List<Pracownik>();
+
+        foreach (Pracownik pracownik in pracownicy)
+        {
+            if (uzyteId.Add(pracownik.ID))
+            {
+                bezDuplikatow.Add(pracownik);
+            }
+        }
+
+        foreach (Pracownik pracownik in bezDuplikatow)
+        {
+            pracownik.Wyswietl();
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
