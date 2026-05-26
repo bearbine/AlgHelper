@@ -50,7 +50,7 @@ internal sealed class TrayAppContext : ApplicationContext
     private readonly string baseSnippetDir;
     private readonly string targetDir;
     private readonly string githubUrl = "https://github.com/bearbine";
-    private readonly string version = "1.77release";
+    private readonly string version = "1.79release";
     private bool notificationsEnabled = false;
     private ToolStripMenuItem notificationsItem;
     private bool cleanupDone = false;
