@@ -15,9 +15,7 @@
   <img src="https://img.shields.io/badge/C%23-snippets-239120?style=for-the-badge&logo=csharp&logoColor=white" alt="csharp">
 </p>
 
-<p align="center">
-  <img src="assets/banner.png" alt="AlgHelper banner">
-</p>
+
 
 ---
 
