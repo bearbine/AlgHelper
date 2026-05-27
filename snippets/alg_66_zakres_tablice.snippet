@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.6 - Najmniejszy zakres z k tablic</Title>
+      <Shortcut>alg_66_zakres_tablice</Shortcut>
+      <Description>Najmniejszy zakres zawierający element z każdej tablicy. Polskie nazwy pomocnicze.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class InfoElementu
+{
+    public int Wartosc;
+    public int IndeksTablicy;
+    public int IndeksElementu;
+
+    public InfoElementu(int wartosc, int indeksTablicy, int indeksElementu)
+    {
+        Wartosc = wartosc;
+        IndeksTablicy = indeksTablicy;
+        IndeksElementu = indeksElementu;
+    }
+}
+
+class Program
+{
+    static (int L, int R) ZnajdzNajmniejszyZakres(int[][] tablice)
+    {
+        PriorityQueue<InfoElementu, int> pq = new PriorityQueue<InfoElementu, int>();
+        int aktualneMaksimum = int.MinValue;
+
+        for (int i = 0; i < tablice.Length; i++)
+        {
+            InfoElementu element = new InfoElementu(tablice[i][0], i, 0);
+            pq.Enqueue(element, element.Wartosc);
+
+            if (element.Wartosc > aktualneMaksimum)
+            {
+                aktualneMaksimum = element.Wartosc;
+            }
+        }
+
+        int najlepszyLewy = 0;
+        int najlepszyPrawy = int.MaxValue;
+
+        while (pq.Count == tablice.Length)
+        {
+            InfoElementu aktualneMinimum = pq.Dequeue();
+
+            if (aktualneMaksimum - aktualneMinimum.Wartosc < najlepszyPrawy - najlepszyLewy)
+            {
+                najlepszyLewy = aktualneMinimum.Wartosc;
+                najlepszyPrawy = aktualneMaksimum;
+            }
+
+            int nastepnyIndeks = aktualneMinimum.IndeksElementu + 1;
+
+            if (nastepnyIndeks >= tablice[aktualneMinimum.IndeksTablicy].Length)
+            {
+                break;
+            }
+
+            int nastepnaWartosc = tablice[aktualneMinimum.IndeksTablicy][nastepnyIndeks];
+            InfoElementu nastepnyElement = new InfoElementu(nastepnaWartosc, aktualneMinimum.IndeksTablicy, nastepnyIndeks);
+            pq.Enqueue(nastepnyElement, nastepnyElement.Wartosc);
+
+            if (nastepnaWartosc > aktualneMaksimum)
+            {
+                aktualneMaksimum = nastepnaWartosc;
+            }
+        }
+
+        return (najlepszyLewy, najlepszyPrawy);
+    }
+
+    static void Main()
+    {
+        int[][] tablice =
+        {
+            new int[] { 4, 10, 15, 24, 26 },
+            new int[] { 0, 9, 12, 20 },
+            new int[] { 5, 18, 22, 30 }
+        };
+
+        var wynik = ZnajdzNajmniejszyZakres(tablice);
+        Console.WriteLine($"[{wynik.L}, {wynik.R}]");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

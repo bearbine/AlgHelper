@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.1 - Lista jednokierunkowa</Title>
+      <Shortcut>alg_51_lista_jedno</Shortcut>
+      <Description>Lista jednokierunkowa z podstawowymi operacjami. Polskie nazwy klas i metod.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+public class ListaJednokierunkowa
+{
+    private class Wezel
+    {
+        public int Wartosc;
+        public Wezel Nastepny;
+
+        public Wezel(int wartosc)
+        {
+            Wartosc = wartosc;
+            Nastepny = null;
+        }
+    }
+
+    private Wezel glowa;
+
+    public bool CzyPusta()
+    {
+        return glowa == null;
+    }
+
+    public void DodajNaPoczatek(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+        newNode.Nastepny = glowa;
+        glowa = newNode;
+    }
+
+    public void DodajNaKoniec(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+
+        if (glowa == null)
+        {
+            glowa = newNode;
+            return;
+        }
+
+        Wezel aktualny = glowa;
+
+        while (aktualny.Nastepny != null)
+        {
+            aktualny = aktualny.Nastepny;
+        }
+
+        aktualny.Nastepny = newNode;
+    }
+
+    public void UsunPierwszy()
+    {
+        if (glowa == null)
+        {
+            return;
+        }
+
+        glowa = glowa.Nastepny;
+    }
+
+    public void Usun(int wartosc)
+    {
+        if (glowa == null)
+        {
+            return;
+        }
+
+        if (glowa.Wartosc == wartosc)
+        {
+            glowa = glowa.Nastepny;
+            return;
+        }
+
+        Wezel aktualny = glowa;
+
+        while (aktualny.Nastepny != null && aktualny.Nastepny.Wartosc != wartosc)
+        {
+            aktualny = aktualny.Nastepny;
+        }
+
+        if (aktualny.Nastepny != null)
+        {
+            aktualny.Nastepny = aktualny.Nastepny.Nastepny;
+        }
+    }
+
+    public bool Zawiera(int wartosc)
+    {
+        Wezel aktualny = glowa;
+
+        while (aktualny != null)
+        {
+            if (aktualny.Wartosc == wartosc)
+            {
+                return true;
+            }
+
+            aktualny = aktualny.Nastepny;
+        }
+
+        return false;
+    }
+
+    public void Wypisz()
+    {
+        Wezel aktualny = glowa;
+
+        while (aktualny != null)
+        {
+            System.Console.Write(aktualny.Wartosc + " ");
+            aktualny = aktualny.Nastepny;
+        }
+
+        System.Console.WriteLine();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ListaJednokierunkowa lista = new ListaJednokierunkowa();
+
+        System.Console.WriteLine("Czy pusta na start: " + lista.CzyPusta());
+
+        lista.DodajNaPoczatek(10);
+        lista.DodajNaPoczatek(5);
+        lista.DodajNaKoniec(20);
+
+        System.Console.WriteLine("Po DodajNaPoczatek(10), DodajNaPoczatek(5), DodajNaKoniec(20):");
+        lista.Wypisz();
+
+        System.Console.WriteLine("Zawiera(10): " + lista.Zawiera(10));
+
+        lista.Usun(10);
+        System.Console.WriteLine("Po Usun(10):");
+        lista.Wypisz();
+
+        lista.UsunPierwszy();
+        System.Console.WriteLine("Po UsunPierwszy():");
+        lista.Wypisz();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

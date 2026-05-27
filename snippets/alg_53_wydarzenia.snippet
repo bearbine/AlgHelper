@@ -3,8 +3,8 @@
   <CodeSnippet Format="1.0.0">
     <Header>
       <Title>Lab 5.3 - Lista wydarzeń</Title>
-      <Shortcut>alg_lista_wydarzenia_53</Shortcut>
-      <Description>Lista jednokierunkowa przechowująca wydarzenia | Namespace-ready: wklejaj wewnątrz namespace { }</Description>
+      <Shortcut>alg_53_wydarzenia</Shortcut>
+      <Description>Lista wydarzeń sortowana po dacie. Kod jest opisany polskimi nazwami.</Description>
       <Author>bearbine</Author>
       <SnippetTypes>
         <SnippetType>Expansion</SnippetType>
@@ -49,92 +49,92 @@ public class Wydarzenie
 
 public class ListaWydarzen
 {
-    private class Node
+    private class Wezel
     {
-        public Wydarzenie Value;
-        public Node Next;
+        public Wydarzenie Wartosc;
+        public Wezel Nastepny;
 
-        public Node(Wydarzenie value)
+        public Wezel(Wydarzenie wartosc)
         {
-            Value = value;
-            Next = null;
+            Wartosc = wartosc;
+            Nastepny = null;
         }
     }
 
-    private Node head;
+    private Wezel glowa;
 
     public void DodajWydarzenie(int dzien, int miesiac, int rok, string opis)
     {
-        Node current = head;
+        Wezel aktualny = glowa;
 
-        while (current != null)
+        while (aktualny != null)
         {
-            if (current.Value.PorownajDate(dzien, miesiac, rok))
+            if (aktualny.Wartosc.PorownajDate(dzien, miesiac, rok))
             {
-                current.Value.DodajOpis(opis);
+                aktualny.Wartosc.DodajOpis(opis);
                 return;
             }
 
-            current = current.Next;
+            aktualny = aktualny.Nastepny;
         }
 
-        Node newNode = new Node(new Wydarzenie(dzien, miesiac, rok, opis));
+        Wezel newNode = new Wezel(new Wydarzenie(dzien, miesiac, rok, opis));
 
-        if (head == null)
+        if (glowa == null)
         {
-            head = newNode;
+            glowa = newNode;
             return;
         }
 
-        current = head;
+        aktualny = glowa;
 
-        while (current.Next != null)
+        while (aktualny.Nastepny != null)
         {
-            current = current.Next;
+            aktualny = aktualny.Nastepny;
         }
 
-        current.Next = newNode;
+        aktualny.Nastepny = newNode;
     }
 
     public void UsunWydarzenie(int dzien, int miesiac, int rok)
     {
-        if (head == null)
+        if (glowa == null)
         {
             return;
         }
 
-        if (head.Value.PorownajDate(dzien, miesiac, rok))
+        if (glowa.Wartosc.PorownajDate(dzien, miesiac, rok))
         {
-            head = head.Next;
+            glowa = glowa.Nastepny;
             return;
         }
 
-        Node current = head;
+        Wezel aktualny = glowa;
 
-        while (current.Next != null &&
-               !current.Next.Value.PorownajDate(dzien, miesiac, rok))
+        while (aktualny.Nastepny != null &&
+               !aktualny.Nastepny.Wartosc.PorownajDate(dzien, miesiac, rok))
         {
-            current = current.Next;
+            aktualny = aktualny.Nastepny;
         }
 
-        if (current.Next != null)
+        if (aktualny.Nastepny != null)
         {
-            current.Next = current.Next.Next;
+            aktualny.Nastepny = aktualny.Nastepny.Nastepny;
         }
     }
 
     public Wydarzenie ZnajdzWydarzenie(int dzien, int miesiac, int rok)
     {
-        Node current = head;
+        Wezel aktualny = glowa;
 
-        while (current != null)
+        while (aktualny != null)
         {
-            if (current.Value.PorownajDate(dzien, miesiac, rok))
+            if (aktualny.Wartosc.PorownajDate(dzien, miesiac, rok))
             {
-                return current.Value;
+                return aktualny.Wartosc;
             }
 
-            current = current.Next;
+            aktualny = aktualny.Nastepny;
         }
 
         return null;
@@ -142,12 +142,12 @@ public class ListaWydarzen
 
     public void WyswietlWszystkie()
     {
-        Node current = head;
+        Wezel aktualny = glowa;
 
-        while (current != null)
+        while (aktualny != null)
         {
-            current.Value.Wyswietl();
-            current = current.Next;
+            aktualny.Wartosc.Wyswietl();
+            aktualny = aktualny.Nastepny;
         }
     }
 }
@@ -158,8 +158,8 @@ class Program
     {
         ListaWydarzen lista = new ListaWydarzen();
 
-        lista.DodajWydarzenie(25, 5, 2026, "Kolokwium z algorytmow");
-        lista.DodajWydarzenie(25, 5, 2026, "Oddac projekt");
+        lista.DodajWydarzenie(25, 5, 2026, "Kolokwium z algorytmów");
+        lista.DodajWydarzenie(25, 5, 2026, "Oddać projekt");
         lista.DodajWydarzenie(1, 6, 2026, "Egzamin");
 
         lista.WyswietlWszystkie();

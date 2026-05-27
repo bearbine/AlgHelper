@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.2 - Przeszukiwanie w głąb rekurencyjnie</Title>
+      <Shortcut>alg_72_graf_wglab_rek</Shortcut>
+      <Description>Rekurencyjne przejście grafu w głąb. Polskie nazwy zmiennych i metod.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void PrzejdzWglab(Dictionary<string, List<string>> graf, string wierzcholek, HashSet<string> odwiedzone)
+    {
+        odwiedzone.Add(wierzcholek);
+        Console.Write(wierzcholek + " ");
+
+        foreach (string sasiad in graf[wierzcholek])
+        {
+            if (!odwiedzone.Contains(sasiad))
+            {
+                PrzejdzWglab(graf, sasiad, odwiedzone);
+            }
+        }
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graf = new Dictionary<string, List<string>>();
+
+        graf["A"] = new List<string>() { "B", "E", "D" };
+        graf["B"] = new List<string>() { "A", "C", "E" };
+        graf["E"] = new List<string>() { "A", "B", "D", "F" };
+        graf["D"] = new List<string>() { "A", "E" };
+        graf["C"] = new List<string>() { "B" };
+        graf["F"] = new List<string>() { "E" };
+
+        PrzejdzWglab(graf, "A", new HashSet<string>());
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

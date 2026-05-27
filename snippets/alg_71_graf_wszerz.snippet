@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.1 - Przeszukiwanie wszerz</Title>
+      <Shortcut>alg_71_graf_wszerz</Shortcut>
+      <Description>Przeszukiwanie grafu wszerz. Polskie nazwy zmiennych i metod.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void PrzejdzWszerz(Dictionary<string, List<string>> graf, string start)
+    {
+        Queue<string> kolejka = new Queue<string>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+
+        odwiedzone.Add(start);
+        kolejka.Enqueue(start);
+
+        while (kolejka.Count > 0)
+        {
+            string wierzcholek = kolejka.Dequeue();
+            Console.Write(wierzcholek + " ");
+
+            foreach (string sasiad in graf[wierzcholek])
+            {
+                if (!odwiedzone.Contains(sasiad))
+                {
+                    odwiedzone.Add(sasiad);
+                    kolejka.Enqueue(sasiad);
+                }
+            }
+        }
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graf = new Dictionary<string, List<string>>();
+
+        graf["A"] = new List<string>() { "B", "E", "D" };
+        graf["B"] = new List<string>() { "A", "C", "E" };
+        graf["E"] = new List<string>() { "A", "B", "D", "F" };
+        graf["D"] = new List<string>() { "A", "E" };
+        graf["C"] = new List<string>() { "B" };
+        graf["F"] = new List<string>() { "E" };
+
+        PrzejdzWszerz(graf, "A");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

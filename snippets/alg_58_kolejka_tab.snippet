@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.8 - Kolejka tablicowa</Title>
+      <Shortcut>alg_58_kolejka_tab</Shortcut>
+      <Description>Kolejka FIFO zaimplementowana na tablicy cyklicznej z polskimi nazwami metod.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+public class KolejkaTablicowa
+{
+    private int[] elementy;
+    private int poczatek;
+    private int koniec;
+    private int licznik;
+
+    public KolejkaTablicowa(int rozmiar)
+    {
+        elementy = new int[rozmiar];
+        poczatek = 0;
+        koniec = -1;
+        licznik = 0;
+    }
+
+    public bool CzyPusta()
+    {
+        return licznik == 0;
+    }
+
+    public bool CzyPelna()
+    {
+        return licznik == elementy.Length;
+    }
+
+    public void Dodaj(int wartosc)
+    {
+        if (CzyPelna())
+        {
+            Console.WriteLine("Kolejka jest pelna.");
+            return;
+        }
+
+        koniec = (koniec + 1) % elementy.Length;
+        elementy[koniec] = wartosc;
+        licznik++;
+    }
+
+    public int Usun()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Kolejka jest pusta.");
+            return -1;
+        }
+
+        int wartosc = elementy[poczatek];
+        poczatek = (poczatek + 1) % elementy.Length;
+        licznik--;
+        return wartosc;
+    }
+
+    public int Podejrzyj()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Kolejka jest pusta.");
+            return -1;
+        }
+
+        return elementy[poczatek];
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        KolejkaTablicowa kolejka = new KolejkaTablicowa(5);
+
+        kolejka.Dodaj(10);
+        kolejka.Dodaj(20);
+        kolejka.Dodaj(30);
+
+        Console.WriteLine(kolejka.Podejrzyj());
+        Console.WriteLine(kolejka.Usun());
+        Console.WriteLine(kolejka.Usun());
+        Console.WriteLine(kolejka.Usun());
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

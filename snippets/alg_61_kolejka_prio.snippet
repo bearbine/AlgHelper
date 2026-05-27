@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.1 - Kolejka priorytetowa</Title>
+      <Shortcut>alg_61_kolejka_prio</Shortcut>
+      <Description>Wbudowana PriorityQueue dla prostego harmonogramu. Polskie nazwy przykładów.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        PriorityQueue<string, int> kolejkaPriorytetowa = new PriorityQueue<string, int>();
+
+        kolejkaPriorytetowa.Enqueue("Napisać sprawozdanie", 3);
+        kolejkaPriorytetowa.Enqueue("Przygotować się do kolokwium", 1);
+        kolejkaPriorytetowa.Enqueue("Oddać projekt", 2);
+        kolejkaPriorytetowa.Enqueue("Pilne zgłoszenie", 0);
+
+        while (kolejkaPriorytetowa.Count > 0)
+        {
+            Console.WriteLine(kolejkaPriorytetowa.Dequeue());
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

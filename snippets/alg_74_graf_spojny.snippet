@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.4 - Spójność grafu</Title>
+      <Shortcut>alg_74_graf_spojny</Shortcut>
+      <Description>Sprawdzanie spójności grafu przez przejście wszerz. Polskie nazwy w kodzie.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static bool CzySpojny(Dictionary<string, List<string>> graf)
+    {
+        if (graf.Count == 0)
+        {
+            return true;
+        }
+
+        HashSet<string> odwiedzone = new HashSet<string>();
+        Queue<string> kolejka = new Queue<string>();
+
+        string start = null;
+
+        foreach (string wierzcholek in graf.Keys)
+        {
+            start = wierzcholek;
+            break;
+        }
+
+        odwiedzone.Add(start);
+        kolejka.Enqueue(start);
+
+        while (kolejka.Count > 0)
+        {
+            string wierzcholek = kolejka.Dequeue();
+
+            foreach (string sasiad in graf[wierzcholek])
+            {
+                if (!odwiedzone.Contains(sasiad))
+                {
+                    odwiedzone.Add(sasiad);
+                    kolejka.Enqueue(sasiad);
+                }
+            }
+        }
+
+        return odwiedzone.Count == graf.Count;
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graf = new Dictionary<string, List<string>>();
+
+        graf["A"] = new List<string>() { "B", "C" };
+        graf["B"] = new List<string>() { "A", "D" };
+        graf["C"] = new List<string>() { "A" };
+        graf["D"] = new List<string>() { "B" };
+
+        Console.WriteLine(CzySpojny(graf) ? "Graf jest spojny" : "Graf nie jest spojny");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

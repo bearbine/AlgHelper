@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
@@ -10,10 +11,11 @@
     <ApplicationIcon>alghelper.ico</ApplicationIcon>
     <RootNamespace>AlgHelper</RootNamespace>
     <StartupObject>Program</StartupObject>
-    <Version>1.79.0</Version>
-    <AssemblyVersion>1.79.0.0</AssemblyVersion>
-    <FileVersion>1.79.0.0</FileVersion>
-    <InformationalVersion>1.79release</InformationalVersion>
+    <Version>1.8.1</Version>
+    <AssemblyVersion>1.8.1.0</AssemblyVersion>
+    <FileVersion>1.8.1.0</FileVersion>
+    <InformationalVersion>1.8.1</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Product>AlgHelper</Product>
     <Authors>bearbine</Authors>
     <Company>bearbine</Company>
@@ -26,7 +28,6 @@
   <ItemGroup>
     <EmbeddedResource Include="alghelper.ico" LogicalName="AlgHelper.alghelper.ico" />
     <EmbeddedResource Include="Resources\install.png" LogicalName="AlgHelper.Resources.install.png" />
-    <EmbeddedResource Include="Resources\delete.png" LogicalName="AlgHelper.Resources.delete.png" />
     <EmbeddedResource Include="Resources\folder.png" LogicalName="AlgHelper.Resources.folder.png" />
     <EmbeddedResource Include="Resources\count.png" LogicalName="AlgHelper.Resources.count.png" />
     <EmbeddedResource Include="Resources\bell.png" LogicalName="AlgHelper.Resources.bell.png" />
@@ -39,4 +40,14 @@
     <Compile Remove="reference_cs/**/*.cs" />
     <Compile Remove="snippets\**\*.cs" />
   </ItemGroup>
+
+  <Target Name="CopyDirectExeAfterPublish" AfterTargets="Publish" Condition="Exists('$(PublishDir)$(AssemblyName).exe')">
+    <PropertyGroup>
+      <DirectReleaseDir>$(MSBuildProjectDirectory)\release\</DirectReleaseDir>
+      <DirectReleaseExe>$(DirectReleaseDir)$(AssemblyName)-$(Version).exe</DirectReleaseExe>
+    </PropertyGroup>
+    <MakeDir Directories="$(DirectReleaseDir)" />
+    <Copy SourceFiles="$(PublishDir)$(AssemblyName).exe" DestinationFiles="$(DirectReleaseExe)" />
+    <Message Importance="high" Text="Direct exe ready: $(DirectReleaseExe)" />
+  </Target>
 </Project>

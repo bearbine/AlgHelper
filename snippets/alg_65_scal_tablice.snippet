@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.5 - Scalanie k tablic</Title>
+      <Shortcut>alg_65_scal_tablice</Shortcut>
+      <Description>Scalanie k posortowanych tablic z kolejką priorytetową. Polskie nazwy pomocnicze.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class InfoElementu
+{
+    public int Wartosc;
+    public int IndeksTablicy;
+    public int IndeksElementu;
+
+    public InfoElementu(int wartosc, int indeksTablicy, int indeksElementu)
+    {
+        Wartosc = wartosc;
+        IndeksTablicy = indeksTablicy;
+        IndeksElementu = indeksElementu;
+    }
+}
+
+class Program
+{
+    static List<int> ScalPosortowaneTablice(int[][] tablice)
+    {
+        PriorityQueue<InfoElementu, int> pq = new PriorityQueue<InfoElementu, int>();
+        List<int> wynik = new List<int>();
+
+        for (int i = 0; i < tablice.Length; i++)
+        {
+            if (tablice[i].Length > 0)
+            {
+                InfoElementu element = new InfoElementu(tablice[i][0], i, 0);
+                pq.Enqueue(element, element.Wartosc);
+            }
+        }
+
+        while (pq.Count > 0)
+        {
+            InfoElementu aktualny = pq.Dequeue();
+            wynik.Add(aktualny.Wartosc);
+
+            int nastepnyIndeks = aktualny.IndeksElementu + 1;
+
+            if (nastepnyIndeks < tablice[aktualny.IndeksTablicy].Length)
+            {
+                int nastepnaWartosc = tablice[aktualny.IndeksTablicy][nastepnyIndeks];
+                InfoElementu nastepnyElement = new InfoElementu(nastepnaWartosc, aktualny.IndeksTablicy, nastepnyIndeks);
+                pq.Enqueue(nastepnyElement, nastepnyElement.Wartosc);
+            }
+        }
+
+        return wynik;
+    }
+
+    static void Main()
+    {
+        int[][] tablice =
+        {
+            new int[] { 1, 4, 7 },
+            new int[] { 2, 5, 8 },
+            new int[] { 0, 3, 9 }
+        };
+
+        Console.WriteLine(string.Join(" ", ScalPosortowaneTablice(tablice)));
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

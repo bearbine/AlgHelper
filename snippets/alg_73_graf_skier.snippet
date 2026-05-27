@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.3 - Graf skierowany</Title>
+      <Shortcut>alg_73_graf_skier</Shortcut>
+      <Description>Przejście wszerz i w głąb dla grafu skierowanego. Polskie nazwy w kodzie.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void PrzejdzWszerz(Dictionary<string, List<string>> graf, string start)
+    {
+        Queue<string> kolejka = new Queue<string>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+
+        odwiedzone.Add(start);
+        kolejka.Enqueue(start);
+
+        while (kolejka.Count > 0)
+        {
+            string wierzcholek = kolejka.Dequeue();
+            Console.Write(wierzcholek + " ");
+
+            foreach (string sasiad in graf[wierzcholek])
+            {
+                if (!odwiedzone.Contains(sasiad))
+                {
+                    odwiedzone.Add(sasiad);
+                    kolejka.Enqueue(sasiad);
+                }
+            }
+        }
+    }
+
+    static void PrzejdzWglab(Dictionary<string, List<string>> graf, string start)
+    {
+        Stack<string> stos = new Stack<string>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+
+        stos.Push(start);
+
+        while (stos.Count > 0)
+        {
+            string wierzcholek = stos.Pop();
+
+            if (!odwiedzone.Contains(wierzcholek))
+            {
+                odwiedzone.Add(wierzcholek);
+                Console.Write(wierzcholek + " ");
+
+                for (int i = graf[wierzcholek].Count - 1; i >= 0; i--)
+                {
+                    string sasiad = graf[wierzcholek][i];
+
+                    if (!odwiedzone.Contains(sasiad))
+                    {
+                        stos.Push(sasiad);
+                    }
+                }
+            }
+        }
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graf = new Dictionary<string, List<string>>();
+
+        graf["A"] = new List<string>() { "B", "D" };
+        graf["B"] = new List<string>() { "C" };
+        graf["C"] = new List<string>() { "E" };
+        graf["D"] = new List<string>();
+        graf["E"] = new List<string>() { "D", "F" };
+        graf["F"] = new List<string>();
+
+        PrzejdzWszerz(graf, "A");
+        Console.WriteLine();
+        PrzejdzWglab(graf, "A");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

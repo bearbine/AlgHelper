@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.7 - Prim</Title>
+      <Shortcut>alg_77_prim</Shortcut>
+      <Description>Minimalne drzewo rozpinające metodą Prima. Polskie nazwy pól i zmiennych.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Krawedz
+{
+    public string Zrodlo;
+    public string Cel;
+    public int Waga;
+
+    public Krawedz(string zrodlo, string cel, int waga)
+    {
+        Zrodlo = zrodlo;
+        Cel = cel;
+        Waga = waga;
+    }
+}
+
+class Program
+{
+    static List<Krawedz> Prim(Dictionary<string, List<Krawedz>> graf, string start)
+    {
+        List<Krawedz> drzewo = new List<Krawedz>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+        PriorityQueue<Krawedz, int> pq = new PriorityQueue<Krawedz, int>();
+
+        odwiedzone.Add(start);
+
+        foreach (Krawedz krawedz in graf[start])
+        {
+            pq.Enqueue(krawedz, krawedz.Waga);
+        }
+
+        while (pq.Count > 0)
+        {
+            Krawedz aktualny = pq.Dequeue();
+
+            if (odwiedzone.Contains(aktualny.Cel))
+            {
+                continue;
+            }
+
+            odwiedzone.Add(aktualny.Cel);
+            drzewo.Add(aktualny);
+
+            foreach (Krawedz krawedz in graf[aktualny.Cel])
+            {
+                if (!odwiedzone.Contains(krawedz.Cel))
+                {
+                    pq.Enqueue(krawedz, krawedz.Waga);
+                }
+            }
+        }
+
+        return drzewo;
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<Krawedz>> graf = new Dictionary<string, List<Krawedz>>();
+
+        graf["A"] = new List<Krawedz>() { new Krawedz("A", "B", 4), new Krawedz("A", "C", 2) };
+        graf["B"] = new List<Krawedz>() { new Krawedz("B", "A", 4), new Krawedz("B", "C", 1), new Krawedz("B", "D", 5) };
+        graf["C"] = new List<Krawedz>() { new Krawedz("C", "A", 2), new Krawedz("C", "B", 1), new Krawedz("C", "D", 8), new Krawedz("C", "E", 10) };
+        graf["D"] = new List<Krawedz>() { new Krawedz("D", "B", 5), new Krawedz("D", "C", 8), new Krawedz("D", "E", 2) };
+        graf["E"] = new List<Krawedz>() { new Krawedz("E", "C", 10), new Krawedz("E", "D", 2) };
+
+        List<Krawedz> drzewo = Prim(graf, "A");
+        int kosztCalkowity = 0;
+
+        foreach (Krawedz krawedz in drzewo)
+        {
+            Console.WriteLine($"{krawedz.Zrodlo} - {krawedz.Cel}, waga: {krawedz.Waga}");
+            kosztCalkowity += krawedz.Waga;
+        }
+
+        Console.WriteLine("Koszt: " + kosztCalkowity);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

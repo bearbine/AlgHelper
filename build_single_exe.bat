@@ -1,3 +1,3 @@
 @echo off
-dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --self-contained false
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0build_single_exe.ps1"
 pause

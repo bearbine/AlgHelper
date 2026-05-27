@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.7 - Stos listowy</Title>
+      <Shortcut>alg_57_stos_lista</Shortcut>
+      <Description>Stos LIFO na liście jednokierunkowej. Polskie nazwy klas, pól i metod.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+public class StosListowy
+{
+    private class Wezel
+    {
+        public int Wartosc;
+        public Wezel Nastepny;
+
+        public Wezel(int wartosc)
+        {
+            Wartosc = wartosc;
+            Nastepny = null;
+        }
+    }
+
+    private Wezel gora;
+
+    public bool CzyPusta()
+    {
+        return gora == null;
+    }
+
+    public void Dodaj(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+        newNode.Nastepny = gora;
+        gora = newNode;
+    }
+
+    public int Zdejmij()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Stos jest pusty.");
+            return -1;
+        }
+
+        int wartosc = gora.Wartosc;
+        gora = gora.Nastepny;
+        return wartosc;
+    }
+
+    public int Podejrzyj()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Stos jest pusty.");
+            return -1;
+        }
+
+        return gora.Wartosc;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        StosListowy stos = new StosListowy();
+
+        stos.Dodaj(10);
+        stos.Dodaj(20);
+        stos.Dodaj(30);
+
+        Console.WriteLine(stos.Podejrzyj());
+        Console.WriteLine(stos.Zdejmij());
+        Console.WriteLine(stos.Zdejmij());
+        Console.WriteLine(stos.Zdejmij());
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

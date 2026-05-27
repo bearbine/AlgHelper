@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.4 - Lista dwukierunkowa</Title>
+      <Shortcut>alg_54_lista_dwu</Shortcut>
+      <Description>Lista dwukierunkowa z dodawaniem, usuwaniem, szukaniem i wypisywaniem.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+public class ListaDwukierunkowa
+{
+    private class Wezel
+    {
+        public int Wartosc;
+        public Wezel Nastepny;
+        public Wezel Poprzedni;
+
+        public Wezel(int wartosc)
+        {
+            Wartosc = wartosc;
+            Nastepny = null;
+            Poprzedni = null;
+        }
+    }
+
+    private Wezel glowa;
+    private Wezel ogon;
+
+    public bool CzyPusta()
+    {
+        return glowa == null;
+    }
+
+    public void DodajNaPoczatek(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+
+        if (glowa == null)
+        {
+            glowa = newNode;
+            ogon = newNode;
+            return;
+        }
+
+        newNode.Nastepny = glowa;
+        glowa.Poprzedni = newNode;
+        glowa = newNode;
+    }
+
+    public void DodajNaKoniec(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+
+        if (ogon == null)
+        {
+            glowa = newNode;
+            ogon = newNode;
+            return;
+        }
+
+        ogon.Nastepny = newNode;
+        newNode.Poprzedni = ogon;
+        ogon = newNode;
+    }
+
+    public void UsunPierwszy()
+    {
+        if (glowa == null)
+        {
+            return;
+        }
+
+        if (glowa == ogon)
+        {
+            glowa = null;
+            ogon = null;
+            return;
+        }
+
+        glowa = glowa.Nastepny;
+        glowa.Poprzedni = null;
+    }
+
+    public void UsunOstatni()
+    {
+        if (ogon == null)
+        {
+            return;
+        }
+
+        if (glowa == ogon)
+        {
+            glowa = null;
+            ogon = null;
+            return;
+        }
+
+        ogon = ogon.Poprzedni;
+        ogon.Nastepny = null;
+    }
+
+    public void Usun(int wartosc)
+    {
+        Wezel aktualny = glowa;
+
+        while (aktualny != null && aktualny.Wartosc != wartosc)
+        {
+            aktualny = aktualny.Nastepny;
+        }
+
+        if (aktualny == null)
+        {
+            return;
+        }
+
+        if (aktualny == glowa)
+        {
+            UsunPierwszy();
+            return;
+        }
+
+        if (aktualny == ogon)
+        {
+            UsunOstatni();
+            return;
+        }
+
+        aktualny.Poprzedni.Nastepny = aktualny.Nastepny;
+        aktualny.Nastepny.Poprzedni = aktualny.Poprzedni;
+    }
+
+    public bool Zawiera(int wartosc)
+    {
+        Wezel aktualny = glowa;
+
+        while (aktualny != null)
+        {
+            if (aktualny.Wartosc == wartosc)
+            {
+                return true;
+            }
+
+            aktualny = aktualny.Nastepny;
+        }
+
+        return false;
+    }
+
+    public void Wypisz()
+    {
+        Wezel aktualny = glowa;
+
+        while (aktualny != null)
+        {
+            System.Console.Write(aktualny.Wartosc + " ");
+            aktualny = aktualny.Nastepny;
+        }
+
+        System.Console.WriteLine();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ListaDwukierunkowa lista = new ListaDwukierunkowa();
+
+        lista.DodajNaKoniec(10);
+        lista.DodajNaKoniec(20);
+        lista.DodajNaPoczatek(5);
+
+        System.Console.WriteLine("Lista po dodaniu 5, 10, 20:");
+        lista.Wypisz();
+
+        System.Console.WriteLine("Zawiera(20): " + lista.Zawiera(20));
+
+        lista.Usun(10);
+        System.Console.WriteLine("Po Usun(10):");
+        lista.Wypisz();
+
+        lista.UsunOstatni();
+        System.Console.WriteLine("Po UsunOstatni():");
+        lista.Wypisz();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

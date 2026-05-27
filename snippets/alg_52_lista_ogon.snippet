@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.2 - Lista jednokierunkowa z ogonem</Title>
+      <Shortcut>alg_52_lista_ogon</Shortcut>
+      <Description>Lista jednokierunkowa z referencją na ogon. Polskie nazwy klas, pól i metod.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+public class ListaJednokierunkowaZOgonem
+{
+    private class Wezel
+    {
+        public int Wartosc;
+        public Wezel Nastepny;
+
+        public Wezel(int wartosc)
+        {
+            Wartosc = wartosc;
+            Nastepny = null;
+        }
+    }
+
+    private Wezel glowa;
+    private Wezel ogon;
+
+    public bool CzyPusta()
+    {
+        return glowa == null;
+    }
+
+    public void DodajNaPoczatek(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+
+        if (glowa == null)
+        {
+            glowa = newNode;
+            ogon = newNode;
+            return;
+        }
+
+        newNode.Nastepny = glowa;
+        glowa = newNode;
+    }
+
+    public void DodajNaKoniec(int wartosc)
+    {
+        Wezel newNode = new Wezel(wartosc);
+
+        if (glowa == null)
+        {
+            glowa = newNode;
+            ogon = newNode;
+            return;
+        }
+
+        ogon.Nastepny = newNode;
+        ogon = newNode;
+    }
+
+    public void UsunPierwszy()
+    {
+        if (glowa == null)
+        {
+            return;
+        }
+
+        glowa = glowa.Nastepny;
+
+        if (glowa == null)
+        {
+            ogon = null;
+        }
+    }
+
+    public void Usun(int wartosc)
+    {
+        if (glowa == null)
+        {
+            return;
+        }
+
+        if (glowa.Wartosc == wartosc)
+        {
+            UsunPierwszy();
+            return;
+        }
+
+        Wezel aktualny = glowa;
+
+        while (aktualny.Nastepny != null && aktualny.Nastepny.Wartosc != wartosc)
+        {
+            aktualny = aktualny.Nastepny;
+        }
+
+        if (aktualny.Nastepny != null)
+        {
+            if (aktualny.Nastepny == ogon)
+            {
+                ogon = aktualny;
+            }
+
+            aktualny.Nastepny = aktualny.Nastepny.Nastepny;
+        }
+    }
+
+    public void Wypisz()
+    {
+        Wezel aktualny = glowa;
+
+        while (aktualny != null)
+        {
+            System.Console.Write(aktualny.Wartosc + " ");
+            aktualny = aktualny.Nastepny;
+        }
+
+        System.Console.WriteLine();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ListaJednokierunkowaZOgonem lista = new ListaJednokierunkowaZOgonem();
+
+        lista.DodajNaKoniec(10);
+        lista.DodajNaKoniec(20);
+        lista.DodajNaPoczatek(5);
+
+        System.Console.WriteLine("Lista po dodaniu 5, 10, 20:");
+        lista.Wypisz();
+
+        lista.Usun(20);
+        System.Console.WriteLine("Po Usun(20), czyli usunieciu ogona:");
+        lista.Wypisz();
+
+        lista.UsunPierwszy();
+        System.Console.WriteLine("Po UsunPierwszy():");
+        lista.Wypisz();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
