@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.2 - Przeszukiwanie w głąb, rekurencja i stos</Title>
+      <Shortcut>alg_72_graf_wglab</Shortcut>
+      <Description>DFS w dwóch wersjach: rekurencja i stos.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Program
+{
+    static void PrzejdzWglabRek(Dictionary<string, List<string>> graf, string wierzcholek, HashSet<string> odwiedzone)
+    {
+        odwiedzone.Add(wierzcholek);
+        Console.Write(wierzcholek + " ");
+
+        foreach (string sasiad in graf[wierzcholek])
+        {
+            if (!odwiedzone.Contains(sasiad))
+            {
+                PrzejdzWglabRek(graf, sasiad, odwiedzone);
+            }
+        }
+    }
+
+    static void PrzejdzWglabStos(Dictionary<string, List<string>> graf, string start)
+    {
+        Stack<string> stos = new Stack<string>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+
+        stos.Push(start);
+
+        while (stos.Count > 0)
+        {
+            string wierzcholek = stos.Pop();
+
+            if (!odwiedzone.Contains(wierzcholek))
+            {
+                odwiedzone.Add(wierzcholek);
+                Console.Write(wierzcholek + " ");
+
+                for (int i = graf[wierzcholek].Count - 1; i >= 0; i--)
+                {
+                    string sasiad = graf[wierzcholek][i];
+
+                    if (!odwiedzone.Contains(sasiad))
+                    {
+                        stos.Push(sasiad);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void Main()
+    {
+        Dictionary<string, List<string>> graf = new Dictionary<string, List<string>>();
+
+        graf["A"] = new List<string>() { "B", "E", "D" };
+        graf["B"] = new List<string>() { "A", "C", "E" };
+        graf["E"] = new List<string>() { "A", "B", "D", "F" };
+        graf["D"] = new List<string>() { "A", "E" };
+        graf["C"] = new List<string>() { "B" };
+        graf["F"] = new List<string>() { "E" };
+
+        Console.WriteLine("PrzejdzWglab rekurencyjnie:");
+        PrzejdzWglabRek(graf, "A", new HashSet<string>());
+
+        Console.WriteLine("
+DFS iteracyjnie ze stosem:");
+        PrzejdzWglabStos(graf, "A");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

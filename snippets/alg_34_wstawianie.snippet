@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.4 - Insertion Sort</Title>
+      <Shortcut>alg_34_wstawianie</Shortcut>
+      <Description>Sortowanie przez wstawianie, prosta wersja z liczeniem operacji.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static void InsertionSort(int[] arr, out int comparisons, out int shifts)
+    {
+        comparisons = 0;
+        shifts = 0;
+
+        for (int i = 1; i < arr.Length; i++)
+        {
+            int key = arr[i];
+            int j = i - 1;
+
+            while (j >= 0)
+            {
+                comparisons++;
+
+                if (arr[j] <= key)
+                {
+                    break;
+                }
+
+                arr[j + 1] = arr[j];
+                shifts++;
+                j--;
+            }
+
+            arr[j + 1] = key;
+        }
+    }
+
+    static void Test(string name, int[] data)
+    {
+        int[] arr = (int[])data.Clone();
+
+        Console.WriteLine(name);
+        Console.WriteLine("Przed: " + string.Join(" ", arr));
+
+        InsertionSort(arr, out int comparisons, out int shifts);
+
+        Console.WriteLine("Po:    " + string.Join(" ", arr));
+        Console.WriteLine("Porownania: " + comparisons + ", przesuniecia: " + shifts);
+        Console.WriteLine();
+    }
+
+    static void Main()
+    {
+        Test("Losowa", new int[] { 8, 3, 5, 2, 6 });
+        Test("Malejaca", new int[] { 8, 6, 5, 3, 2 });
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

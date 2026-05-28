@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.2 - Przeszukiwanie w głąb ze stosem</Title>
+      <Shortcut>alg_72_graf_wglab_stos</Shortcut>
+      <Description>DFS iteracyjnie na stosie.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void PrzejdzWglab(Dictionary<string, List<string>> graf, string start)
+    {
+        Stack<string> stos = new Stack<string>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+
+        // w DFS stos zastępuje rekurencję
+        stos.Push(start);
+
+        while (stos.Count > 0)
+        {
+            string wierzcholek = stos.Pop();
+
+            if (!odwiedzone.Contains(wierzcholek))
+            {
+                odwiedzone.Add(wierzcholek);
+                Console.Write(wierzcholek + " ");
+
+                for (int i = graf[wierzcholek].Count - 1; i >= 0; i--)
+                {
+                    string sasiad = graf[wierzcholek][i];
+
+                    if (!odwiedzone.Contains(sasiad))
+                    {
+                        stos.Push(sasiad);
+                    }
+                }
+            }
+        }
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<string>> graf = new Dictionary<string, List<string>>();
+
+        graf["A"] = new List<string>() { "B", "E", "D" };
+        graf["B"] = new List<string>() { "A", "C", "E" };
+        graf["E"] = new List<string>() { "A", "B", "D", "F" };
+        graf["D"] = new List<string>() { "A", "E" };
+        graf["C"] = new List<string>() { "B" };
+        graf["F"] = new List<string>() { "E" };
+
+        PrzejdzWglab(graf, "A");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

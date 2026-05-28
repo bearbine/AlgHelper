@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.3 - Lista wydarzeń</Title>
+      <Shortcut>alg_53_wydarzenia</Shortcut>
+      <Description>Prosta lista wydarzeń, ta sama data dopisuje opis.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+public class Wydarzenie
+{
+    private int dzien;
+    private int miesiac;
+    private int rok;
+    private string opis;
+
+    public Wydarzenie(int dzien, int miesiac, int rok, string opis)
+    {
+        this.dzien = dzien;
+        this.miesiac = miesiac;
+        this.rok = rok;
+        this.opis = opis;
+    }
+
+    public void DodajOpis(string nowyOpis)
+    {
+        opis = opis + "; " + nowyOpis;
+    }
+
+    public bool PorownajDate(int dzien, int miesiac, int rok)
+    {
+        return this.dzien == dzien &&
+               this.miesiac == miesiac &&
+               this.rok == rok;
+    }
+
+    public void Wyswietl()
+    {
+        Console.WriteLine(dzien + "." + miesiac + "." + rok + " - " + opis);
+    }
+}
+
+public class ListaWydarzen
+{
+    private class Node
+    {
+        public Wydarzenie Value;
+        public Node Next;
+
+        public Node(Wydarzenie value)
+        {
+            Value = value;
+            Next = null;
+        }
+    }
+
+    private Node head;
+
+    public void DodajWydarzenie(int dzien, int miesiac, int rok, string opis)
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            if (current.Value.PorownajDate(dzien, miesiac, rok))
+            {
+                // ta sama data, więc tylko dopisujemy kolejny opis
+                current.Value.DodajOpis(opis);
+                return;
+            }
+
+            current = current.Next;
+        }
+
+        Node newNode = new Node(new Wydarzenie(dzien, miesiac, rok, opis));
+
+        if (head == null)
+        {
+            head = newNode;
+            return;
+        }
+
+        current = head;
+
+        while (current.Next != null)
+        {
+            current = current.Next;
+        }
+
+        current.Next = newNode;
+    }
+
+    public void UsunWydarzenie(int dzien, int miesiac, int rok)
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        if (head.Value.PorownajDate(dzien, miesiac, rok))
+        {
+            head = head.Next;
+            return;
+        }
+
+        Node current = head;
+
+        while (current.Next != null &&
+               !current.Next.Value.PorownajDate(dzien, miesiac, rok))
+        {
+            current = current.Next;
+        }
+
+        if (current.Next != null)
+        {
+            current.Next = current.Next.Next;
+        }
+    }
+
+    public Wydarzenie ZnajdzWydarzenie(int dzien, int miesiac, int rok)
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            if (current.Value.PorownajDate(dzien, miesiac, rok))
+            {
+                return current.Value;
+            }
+
+            current = current.Next;
+        }
+
+        return null;
+    }
+
+    public void WyswietlWszystkie()
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            current.Value.Wyswietl();
+            current = current.Next;
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        ListaWydarzen lista = new ListaWydarzen();
+
+        lista.DodajWydarzenie(25, 5, 2026, "Kolokwium z algorytmów");
+        lista.DodajWydarzenie(25, 5, 2026, "Oddać projekt");
+        lista.DodajWydarzenie(1, 6, 2026, "Egzamin");
+
+        lista.WyswietlWszystkie();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

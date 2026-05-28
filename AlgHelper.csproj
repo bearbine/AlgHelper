@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>AlgHelper</AssemblyName>
+    <ApplicationIcon>alghelper.ico</ApplicationIcon>
+    <RootNamespace>AlgHelper</RootNamespace>
+    <StartupObject>Program</StartupObject>
+    <Version>2.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <InformationalVersion>2.0</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Product>AlgHelper</Product>
+    <Authors>bearbine</Authors>
+    <Company>bearbine</Company>
+    <Description>small tray manager for Visual Studio C# snippets</Description>
+    <PackageProjectUrl>https://github.com/bearbine/AlgHelper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bearbine/AlgHelper</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="alghelper.ico" LogicalName="AlgHelper.alghelper.ico" />
+    <EmbeddedResource Include="Resources\install.png" LogicalName="AlgHelper.Resources.install.png" />
+    <EmbeddedResource Include="Resources\folder.png" LogicalName="AlgHelper.Resources.folder.png" />
+    <EmbeddedResource Include="Resources\count.png" LogicalName="AlgHelper.Resources.count.png" />
+    <EmbeddedResource Include="Resources\bell.png" LogicalName="AlgHelper.Resources.bell.png" />
+    <EmbeddedResource Include="Resources\about.png" LogicalName="AlgHelper.Resources.about.png" />
+    <EmbeddedResource Include="Resources\exit.png" LogicalName="AlgHelper.Resources.exit.png" />
+    <EmbeddedResource Include="Resources\author.png" LogicalName="AlgHelper.Resources.author.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="reference_cs\**\*.cs" />
+    <Compile Remove="reference_cs/**/*.cs" />
+    <Compile Remove="snippets\**\*.cs" />
+  </ItemGroup>
+
+  <Target Name="CopyDirectExeAfterPublish" AfterTargets="Publish" Condition="Exists('$(PublishDir)$(AssemblyName).exe')">
+    <PropertyGroup>
+      <DirectReleaseDir>$(MSBuildProjectDirectory)\release\</DirectReleaseDir>
+      <DirectReleaseExe>$(DirectReleaseDir)$(AssemblyName)-$(Version).exe</DirectReleaseExe>
+    </PropertyGroup>
+    <MakeDir Directories="$(DirectReleaseDir)" />
+    <Copy SourceFiles="$(PublishDir)$(AssemblyName).exe" DestinationFiles="$(DirectReleaseExe)" />
+    <Message Importance="high" Text="Direct exe ready: $(DirectReleaseExe)" />
+  </Target>
+</Project>

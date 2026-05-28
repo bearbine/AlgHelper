@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.7 - Stos tablicowy i listowy</Title>
+      <Shortcut>alg_57_stos</Shortcut>
+      <Description>Dwie wersje stosu: tablica i lista.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+public class StosTablicowy
+{
+    private int[] elementy;
+    private int top;
+
+    public StosTablicowy(int rozmiar)
+    {
+        elementy = new int[rozmiar];
+        top = -1;
+    }
+
+    public bool CzyPusta()
+    {
+        return top == -1;
+    }
+
+    public void Dodaj(int value)
+    {
+        if (top == elementy.Length - 1)
+        {
+            Console.WriteLine("Stos tablicowy jest pelny.");
+            return;
+        }
+
+        top++;
+        elementy[top] = value;
+    }
+
+    public int Zdejmij()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Stos tablicowy jest pusty.");
+            return -1;
+        }
+
+        int value = elementy[top];
+        top--;
+        return value;
+    }
+
+    public int Podejrzyj()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Stos tablicowy jest pusty.");
+            return -1;
+        }
+
+        return elementy[top];
+    }
+}
+
+public class StosListowy
+{
+    private class Node
+    {
+        public int Value;
+        public Node Next;
+
+        public Node(int value)
+        {
+            Value = value;
+            Next = null;
+        }
+    }
+
+    private Node top;
+
+    public bool CzyPusta()
+    {
+        return top == null;
+    }
+
+    public void Dodaj(int value)
+    {
+        Node newNode = new Node(value);
+        newNode.Next = top;
+        top = newNode;
+    }
+
+    public int Zdejmij()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Stos listowy jest pusty.");
+            return -1;
+        }
+
+        int value = top.Value;
+        top = top.Next;
+        return value;
+    }
+
+    public int Podejrzyj()
+    {
+        if (CzyPusta())
+        {
+            Console.WriteLine("Stos listowy jest pusty.");
+            return -1;
+        }
+
+        return top.Value;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        StosTablicowy stosTab = new StosTablicowy(5);
+        stosTab.Dodaj(1);
+        stosTab.Dodaj(2);
+        stosTab.Dodaj(3);
+
+        Console.WriteLine("STOS NA TABLICY");
+        Console.WriteLine("Podejrzyj: " + stosTab.Podejrzyj());
+        while (!stosTab.CzyPusta())
+        {
+            Console.WriteLine("Zdejmij: " + stosTab.Zdejmij());
+        }
+
+        StosListowy stosLista = new StosListowy();
+        stosLista.Dodaj(1);
+        stosLista.Dodaj(2);
+        stosLista.Dodaj(3);
+
+        Console.WriteLine("
+STOS NA LISCIE");
+        Console.WriteLine("Podejrzyj: " + stosLista.Podejrzyj());
+        while (!stosLista.CzyPusta())
+        {
+            Console.WriteLine("Zdejmij: " + stosLista.Zdejmij());
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

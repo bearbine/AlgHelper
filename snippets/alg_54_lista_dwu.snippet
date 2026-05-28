@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.4 - Lista dwukierunkowa</Title>
+      <Shortcut>alg_54_lista_dwu</Shortcut>
+      <Description>Lista dwukierunkowa z podstawowymi operacjami.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+public class ListaDwukierunkowa
+{
+    private class Node
+    {
+        public int Value;
+        public Node Next;
+        public Node Previous;
+
+        public Node(int value)
+        {
+            Value = value;
+            Next = null;
+            Previous = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+
+    public bool CzyPusta()
+    {
+        return head == null;
+    }
+
+    public void DodajNaPoczatek(int value)
+    {
+        Node newNode = new Node(value);
+
+        if (head == null)
+        {
+            head = newNode;
+            tail = newNode;
+            return;
+        }
+
+        newNode.Next = head;
+        head.Previous = newNode;
+        head = newNode;
+    }
+
+    public void DodajNaKoniec(int value)
+    {
+        Node newNode = new Node(value);
+
+        if (tail == null)
+        {
+            head = newNode;
+            tail = newNode;
+            return;
+        }
+
+        tail.Next = newNode;
+        newNode.Previous = tail;
+        tail = newNode;
+    }
+
+    public void UsunPierwszy()
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        if (head == tail)
+        {
+            head = null;
+            tail = null;
+            return;
+        }
+
+        head = head.Next;
+        head.Previous = null;
+    }
+
+    public void UsunOstatni()
+    {
+        if (tail == null)
+        {
+            return;
+        }
+
+        if (head == tail)
+        {
+            head = null;
+            tail = null;
+            return;
+        }
+
+        tail = tail.Previous;
+        tail.Next = null;
+    }
+
+    public void Usun(int value)
+    {
+        Node current = head;
+
+        while (current != null && current.Value != value)
+        {
+            current = current.Next;
+        }
+
+        if (current == null)
+        {
+            return;
+        }
+
+        if (current == head)
+        {
+            UsunPierwszy();
+            return;
+        }
+
+        if (current == tail)
+        {
+            UsunOstatni();
+            return;
+        }
+
+        current.Previous.Next = current.Next;
+        current.Next.Previous = current.Previous;
+    }
+
+    public bool Zawiera(int value)
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            if (current.Value == value)
+            {
+                return true;
+            }
+
+            current = current.Next;
+        }
+
+        return false;
+    }
+
+    public void Wypisz()
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            System.Console.Write(current.Value + " ");
+            current = current.Next;
+        }
+
+        System.Console.WriteLine();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ListaDwukierunkowa lista = new ListaDwukierunkowa();
+
+        lista.DodajNaKoniec(10);
+        lista.DodajNaKoniec(20);
+        lista.DodajNaPoczatek(5);
+
+        System.Console.WriteLine("Lista po dodaniu 5, 10, 20:");
+        lista.Wypisz();
+
+        System.Console.WriteLine("Zawiera(20): " + lista.Zawiera(20));
+
+        lista.Usun(10);
+        System.Console.WriteLine("Po Usun(10):");
+        lista.Wypisz();
+
+        lista.UsunOstatni();
+        System.Console.WriteLine("Po UsunOstatni():");
+        lista.Wypisz();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

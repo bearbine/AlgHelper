@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 4.7 - Wieże Hanoi</Title>
+      <Shortcut>alg_47_hanoi</Shortcut>
+      <Description>Wieże Hanoi rekurencyjnie, plus liczba ruchów dla kilku n.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static long moves;
+
+    static void Hanoi(int n, char from, char helper, char to)
+    {
+        if (n == 0)
+        {
+            return;
+        }
+
+        Hanoi(n - 1, from, to, helper);
+        Console.WriteLine(from + " -> " + to);
+        moves++;
+        Hanoi(n - 1, helper, from, to);
+    }
+
+    static long CountMoves(int n)
+    {
+        return (1L << n) - 1;
+    }
+
+    static void Main()
+    {
+        moves = 0;
+        Hanoi(3, 'A', 'B', 'C');
+        Console.WriteLine("Ruchy dla n=3: " + moves);
+        Console.WriteLine();
+
+        for (int n = 3; n <= 7; n++)
+        {
+            Console.WriteLine("n=" + n + ", ruchy=" + CountMoves(n));
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.4 - Kolejka zgłoszeń</Title>
+      <Shortcut>alg_64_zgloszenia</Shortcut>
+      <Description>Obsługa zgłoszeń przez kolejkę priorytetową.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Zgloszenie
+{
+    public int Id { get; set; }
+    public string Opis { get; set; }
+    public int Priorytet { get; set; }
+
+    public Zgloszenie(int id, string opis, int priorytet)
+    {
+        Id = id;
+        Opis = opis;
+        Priorytet = priorytet;
+    }
+
+    public void Wyswietl()
+    {
+        Console.WriteLine($"ID: {Id}, Priorytet: {Priorytet}, Opis: {Opis}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        PriorityQueue<Zgloszenie, int> kolejkaPriorytetowa = new PriorityQueue<Zgloszenie, int>();
+
+        Zgloszenie t1 = new Zgloszenie(1, "Problem z logowaniem", 2);
+        Zgloszenie t2 = new Zgloszenie(2, "Serwer nie działa", 5);
+        Zgloszenie t3 = new Zgloszenie(3, "Błąd w formularzu", 1);
+        Zgloszenie t4 = new Zgloszenie(4, "Awaria bazy danych", 4);
+
+        kolejkaPriorytetowa.Enqueue(t1, -t1.Priorytet);
+        kolejkaPriorytetowa.Enqueue(t2, -t2.Priorytet);
+        kolejkaPriorytetowa.Enqueue(t3, -t3.Priorytet);
+        kolejkaPriorytetowa.Enqueue(t4, -t4.Priorytet);
+
+        while (kolejkaPriorytetowa.Count > 0)
+        {
+            kolejkaPriorytetowa.Dequeue().Wyswietl();
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

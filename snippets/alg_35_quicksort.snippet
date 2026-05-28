@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.5 - QuickSort</Title>
+      <Shortcut>alg_35_quicksort</Shortcut>
+      <Description>QuickSort z pivotem na końcu tablicy.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static void QuickSort(int[] arr, int start, int end)
+    {
+        if (start < end)
+        {
+            int pivotIndex = Partition(arr, start, end);
+            QuickSort(arr, start, pivotIndex - 1);
+            QuickSort(arr, pivotIndex + 1, end);
+        }
+    }
+
+    static int Partition(int[] arr, int start, int end)
+    {
+        int pivot = arr[end];
+        int i = start - 1;
+
+        for (int j = start; j < end; j++)
+        {
+            if (arr[j] <= pivot)
+            {
+                i++;
+                Swap(arr, i, j);
+            }
+        }
+
+        Swap(arr, i + 1, end);
+        return i + 1;
+    }
+
+    static void Swap(int[] arr, int a, int b)
+    {
+        int tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
+    }
+
+    static void Main()
+    {
+        int[] arr = { 9, 5, 7, 4, 8, 6 };
+
+        Console.WriteLine("Przed: " + string.Join(" ", arr));
+        QuickSort(arr, 0, arr.Length - 1);
+        Console.WriteLine("Po:    " + string.Join(" ", arr));
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

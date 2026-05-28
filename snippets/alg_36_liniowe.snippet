@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.6 - Linear Search</Title>
+      <Shortcut>alg_36_liniowe</Shortcut>
+      <Description>Wyszukiwanie liniowe z liczeniem porównań.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static int LinearSearch(int[] arr, int target, out int comparisons)
+    {
+        comparisons = 0;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            comparisons++;
+
+            if (arr[i] == target)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    static void Test(int[] arr, int target)
+    {
+        int index = LinearSearch(arr, target, out int comparisons);
+        Console.WriteLine("Szukana: " + target + ", index: " + index + ", porownania: " + comparisons);
+    }
+
+    static void Main()
+    {
+        int[] arr = { 4, 7, 2, 9, 1 };
+
+        Test(arr, 4); // optymistyczny
+        Test(arr, 2); // sredni
+        Test(arr, 5); // pesymistyczny / brak
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

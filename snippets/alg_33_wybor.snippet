@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.3 - Selection Sort</Title>
+      <Shortcut>alg_33_wybor</Shortcut>
+      <Description>Sortowanie przez wybór, z liczeniem porównań i zamian.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static void SelectionSort(int[] arr, out int comparisons, out int swaps)
+    {
+        comparisons = 0;
+        swaps = 0;
+
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            int minIndex = i;
+
+            for (int j = i + 1; j < arr.Length; j++)
+            {
+                comparisons++;
+
+                if (arr[j] < arr[minIndex])
+                {
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i)
+            {
+                int tmp = arr[i];
+                arr[i] = arr[minIndex];
+                arr[minIndex] = tmp;
+                swaps++;
+            }
+        }
+    }
+
+    static void Main()
+    {
+        int[] arr = { 64, 25, 12, 22, 11 };
+
+        Console.WriteLine("Przed: " + string.Join(" ", arr));
+        SelectionSort(arr, out int comparisons, out int swaps);
+        Console.WriteLine("Po:    " + string.Join(" ", arr));
+        Console.WriteLine("Porownania: " + comparisons + ", zamiany: " + swaps);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

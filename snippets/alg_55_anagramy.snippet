@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.5 - Słownik anagramów</Title>
+      <Shortcut>alg_55_anagramy</Shortcut>
+      <Description>Grupowanie anagramów przez wspólny klucz w Dictionary.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static string Klucz(string slowo)
+    {
+        char[] litery = slowo.ToCharArray();
+        Array.Sort(litery);
+        return new string(litery);
+    }
+
+    static void Main()
+    {
+        List<string> slowa = new List<string>()
+        {
+            "kot", "tok", "kto",
+            "sok", "kos",
+            "kula", "luka",
+            "wor", "row",
+            "tara", "rata",
+            "masa", "sama",
+            "grad", "drga"
+        };
+
+        Dictionary<string, List<string>> grupy = new Dictionary<string, List<string>>();
+
+        foreach (string slowo in slowa)
+        {
+            // anagramy po posortowaniu liter mają ten sam klucz
+            string klucz = Klucz(slowo);
+
+            if (!grupy.ContainsKey(klucz))
+            {
+                grupy[klucz] = new List<string>();
+            }
+
+            grupy[klucz].Add(slowo);
+        }
+
+        foreach (var grupa in grupy)
+        {
+            Console.WriteLine(string.Join(", ", grupa.Value));
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

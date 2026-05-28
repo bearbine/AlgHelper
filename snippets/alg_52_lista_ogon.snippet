@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.2 - Lista jednokierunkowa z ogonem</Title>
+      <Shortcut>alg_52_lista_ogon</Shortcut>
+      <Description>Lista jednokierunkowa z head/tail, szybkie dodawanie na koniec.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+public class ListaJednokierunkowaZOgonem
+{
+    private class Node
+    {
+        public int Value;
+        public Node Next;
+
+        public Node(int value)
+        {
+            Value = value;
+            Next = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+
+    public bool CzyPusta()
+    {
+        return head == null;
+    }
+
+    public void DodajNaPoczatek(int value)
+    {
+        Node newNode = new Node(value);
+
+        if (head == null)
+        {
+            head = newNode;
+            tail = newNode;
+            return;
+        }
+
+        newNode.Next = head;
+        head = newNode;
+    }
+
+    public void DodajNaKoniec(int value)
+    {
+        Node newNode = new Node(value);
+
+        if (head == null)
+        {
+            head = newNode;
+            tail = newNode;
+            return;
+        }
+
+        // tail pozwala nie szukać końca listy za każdym razem
+        tail.Next = newNode;
+        tail = newNode;
+    }
+
+    public void UsunPierwszy()
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        head = head.Next;
+
+        if (head == null)
+        {
+            tail = null;
+        }
+    }
+
+    public void Usun(int value)
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        if (head.Value == value)
+        {
+            UsunPierwszy();
+            return;
+        }
+
+        Node current = head;
+
+        while (current.Next != null && current.Next.Value != value)
+        {
+            current = current.Next;
+        }
+
+        if (current.Next != null)
+        {
+            if (current.Next == tail)
+            {
+                tail = current;
+            }
+
+            current.Next = current.Next.Next;
+        }
+    }
+
+    public void Wypisz()
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            System.Console.Write(current.Value + " ");
+            current = current.Next;
+        }
+
+        System.Console.WriteLine();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ListaJednokierunkowaZOgonem lista = new ListaJednokierunkowaZOgonem();
+
+        lista.DodajNaKoniec(10);
+        lista.DodajNaKoniec(20);
+        lista.DodajNaPoczatek(5);
+
+        System.Console.WriteLine("Lista po dodaniu 5, 10, 20:");
+        lista.Wypisz();
+
+        lista.Usun(20);
+        System.Console.WriteLine("Po Usun(20), czyli usunieciu ogona:");
+        lista.Wypisz();
+
+        lista.UsunPierwszy();
+        System.Console.WriteLine("Po UsunPierwszy():");
+        lista.Wypisz();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 4.4 - Trójkąt Pascala</Title>
+      <Shortcut>alg_44_pascal</Shortcut>
+      <Description>Pascal rekurencyjnie i iteracyjnie.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static int C(int n, int k)
+    {
+        if (k == 0 || k == n) return 1;
+        return C(n - 1, k - 1) + C(n - 1, k);
+    }
+
+    static void PascalRec(int rows)
+    {
+        Console.WriteLine("Rekurencyjnie:");
+
+        for (int n = 0; n < rows; n++)
+        {
+            for (int k = 0; k <= n; k++)
+            {
+                Console.Write(C(n, k) + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+
+    static void PascalIter(int rows)
+    {
+        Console.WriteLine("Iteracyjnie:");
+        int[,] arr = new int[rows, rows];
+
+        for (int n = 0; n < rows; n++)
+        {
+            arr[n, 0] = 1;
+            arr[n, n] = 1;
+
+            for (int k = 1; k < n; k++)
+            {
+                arr[n, k] = arr[n - 1, k - 1] + arr[n - 1, k];
+            }
+        }
+
+        for (int n = 0; n < rows; n++)
+        {
+            for (int k = 0; k <= n; k++)
+            {
+                Console.Write(arr[n, k] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+
+    static void Main()
+    {
+        int rows = 6;
+        PascalRec(rows);
+        Console.WriteLine();
+        PascalIter(rows);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.2 - Kolejka priorytetowa max</Title>
+      <Shortcut>alg_62_kolejka_max</Shortcut>
+      <Description>Kolejka max zrobiona na SortedDictionary.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class KolejkaPriorytetowaMax
+{
+    private SortedDictionary<int, Queue<string>> elementy =
+        new SortedDictionary<int, Queue<string>>(
+            // odwrócone sortowanie, żeby największy priorytet był pierwszy
+            Comparer<int>.Create((a, b) => b.CompareTo(a))
+        );
+
+    public bool CzyPusta()
+    {
+        return elementy.Count == 0;
+    }
+
+    public void Dodaj(string value, int priorytet)
+    {
+        if (!elementy.ContainsKey(priorytet))
+        {
+            elementy[priorytet] = new Queue<string>();
+        }
+
+        elementy[priorytet].Enqueue(value);
+    }
+
+    public string Podejrzyj()
+    {
+        if (CzyPusta())
+        {
+            throw new InvalidOperationException("Kolejka jest pusta.");
+        }
+
+        foreach (var para in elementy)
+        {
+            return para.Value.Peek();
+        }
+
+        return null;
+    }
+
+    public string Usun()
+    {
+        if (CzyPusta())
+        {
+            throw new InvalidOperationException("Kolejka jest pusta.");
+        }
+
+        foreach (var para in elementy)
+        {
+            int priorytet = para.Key;
+            Queue<string> kolejka = para.Value;
+            string value = kolejka.Dequeue();
+
+            if (kolejka.Count == 0)
+            {
+                elementy.Remove(priorytet);
+            }
+
+            return value;
+        }
+
+        return null;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        KolejkaPriorytetowaMax pq = new KolejkaPriorytetowaMax();
+
+        pq.Dodaj("A", 2);
+        pq.Dodaj("B", 5);
+        pq.Dodaj("C", 1);
+        pq.Dodaj("D", 5);
+
+        while (!pq.CzyPusta())
+        {
+            Console.WriteLine(pq.Usun());
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

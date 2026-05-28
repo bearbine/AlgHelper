@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.7 - Minimalne drzewo rozpinające</Title>
+      <Shortcut>alg_77_drzewo_min</Shortcut>
+      <Description>MST w jednym przykładzie: Kruskal i Prim.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[using System;
+using System.Collections.Generic;
+
+public class Krawedz
+{
+    public string Zrodlo;
+    public string Cel;
+    public int Waga;
+
+    public Krawedz(string zrodlo, string cel, int waga)
+    {
+        Zrodlo = zrodlo;
+        Cel = cel;
+        Waga = waga;
+    }
+}
+
+public class ZbioryRozlaczne
+{
+    private Dictionary<string, string> rodzic = new Dictionary<string, string>();
+
+    public void UtworzZbior(string wierzcholek)
+    {
+        rodzic[wierzcholek] = wierzcholek;
+    }
+
+    public string Znajdz(string wierzcholek)
+    {
+        if (rodzic[wierzcholek] != wierzcholek)
+        {
+            rodzic[wierzcholek] = Znajdz(rodzic[wierzcholek]);
+        }
+
+        return rodzic[wierzcholek];
+    }
+
+    public void Polacz(string a, string b)
+    {
+        string korzenA = Znajdz(a);
+        string korzenB = Znajdz(b);
+
+        if (korzenA != korzenB)
+        {
+            rodzic[korzenB] = korzenA;
+        }
+    }
+}
+
+public class Program
+{
+    static List<Krawedz> Kruskal(List<string> wierzcholki, List<Krawedz> krawedzie)
+    {
+        List<Krawedz> drzewo = new List<Krawedz>();
+        ZbioryRozlaczne zbiory = new ZbioryRozlaczne();
+
+        foreach (string wierzcholek in wierzcholki)
+        {
+            zbiory.UtworzZbior(wierzcholek);
+        }
+
+        // Kruskal zaczyna od najtańszych krawędzi
+        krawedzie.Sort((a, b) => a.Waga.CompareTo(b.Waga));
+
+        foreach (Krawedz krawedz in krawedzie)
+        {
+            if (zbiory.Znajdz(krawedz.Zrodlo) != zbiory.Znajdz(krawedz.Cel))
+            {
+                drzewo.Add(krawedz);
+                zbiory.Polacz(krawedz.Zrodlo, krawedz.Cel);
+            }
+        }
+
+        return drzewo;
+    }
+
+    static List<Krawedz> Prim(Dictionary<string, List<Krawedz>> graf, string start)
+    {
+        List<Krawedz> drzewo = new List<Krawedz>();
+        HashSet<string> odwiedzone = new HashSet<string>();
+        PriorityQueue<Krawedz, int> kolejka = new PriorityQueue<Krawedz, int>();
+
+        // Prim startuje z jednego wierzchołka
+        odwiedzone.Add(start);
+
+        foreach (Krawedz krawedz in graf[start])
+        {
+            kolejka.Enqueue(krawedz, krawedz.Waga);
+        }
+
+        while (kolejka.Count > 0)
+        {
+            Krawedz aktualna = kolejka.Dequeue();
+
+            if (odwiedzone.Contains(aktualna.Cel))
+            {
+                continue;
+            }
+
+            odwiedzone.Add(aktualna.Cel);
+            drzewo.Add(aktualna);
+
+            foreach (Krawedz krawedz in graf[aktualna.Cel])
+            {
+                if (!odwiedzone.Contains(krawedz.Cel))
+                {
+                    kolejka.Enqueue(krawedz, krawedz.Waga);
+                }
+            }
+        }
+
+        return drzewo;
+    }
+
+    static Dictionary<string, List<Krawedz>> ZbudujGraf(List<string> wierzcholki, List<Krawedz> krawedzie)
+    {
+        Dictionary<string, List<Krawedz>> graf = new Dictionary<string, List<Krawedz>>();
+
+        foreach (string wierzcholek in wierzcholki)
+        {
+            graf[wierzcholek] = new List<Krawedz>();
+        }
+
+        foreach (Krawedz krawedz in krawedzie)
+        {
+            graf[krawedz.Zrodlo].Add(new Krawedz(krawedz.Zrodlo, krawedz.Cel, krawedz.Waga));
+            graf[krawedz.Cel].Add(new Krawedz(krawedz.Cel, krawedz.Zrodlo, krawedz.Waga));
+        }
+
+        return graf;
+    }
+
+    static void WypiszDrzewo(string nazwa, List<Krawedz> drzewo)
+    {
+        int kosztCalkowity = 0;
+
+        Console.WriteLine(nazwa + ":");
+        foreach (Krawedz krawedz in drzewo)
+        {
+            Console.WriteLine(krawedz.Zrodlo + " - " + krawedz.Cel + ", waga: " + krawedz.Waga);
+            kosztCalkowity += krawedz.Waga;
+        }
+
+        Console.WriteLine("Łączny koszt: " + kosztCalkowity);
+        Console.WriteLine();
+    }
+
+    public static void Main()
+    {
+        List<string> miasta = new List<string>() { "A", "B", "C", "D", "E" };
+
+        List<Krawedz> polaczenia = new List<Krawedz>()
+        {
+            new Krawedz("B", "C", 1),
+            new Krawedz("A", "C", 2),
+            new Krawedz("D", "E", 2),
+            new Krawedz("A", "B", 4),
+            new Krawedz("B", "D", 5),
+            new Krawedz("C", "D", 8),
+            new Krawedz("C", "E", 10)
+        };
+
+        Dictionary<string, List<Krawedz>> graf = ZbudujGraf(miasta, polaczenia);
+
+        WypiszDrzewo("Kruskal", Kruskal(miasta, polaczenia));
+        WypiszDrzewo("Prim", Prim(graf, "A"));
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

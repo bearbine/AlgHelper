@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.8 - Binary Search</Title>
+      <Shortcut>alg_38_binarne</Shortcut>
+      <Description>Wyszukiwanie binarne i krótkie porównanie z liniowym.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static int BinarySearch(int[] arr, int target, out int comparisons)
+    {
+        int left = 0;
+        int right = arr.Length - 1;
+        comparisons = 0;
+
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            comparisons++;
+
+            if (arr[mid] == target)
+            {
+                return mid;
+            }
+
+            if (arr[mid] < target)
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+
+    static int LinearSearch(int[] arr, int target, out int comparisons)
+    {
+        comparisons = 0;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            comparisons++;
+            if (arr[i] == target) return i;
+        }
+
+        return -1;
+    }
+
+    static void Main()
+    {
+        int[] arr = { 2, 4, 6, 8, 10, 12, 14 };
+        int target = 10;
+
+        int indexBin = BinarySearch(arr, target, out int compBin);
+        int indexLin = LinearSearch(arr, target, out int compLin);
+
+        Console.WriteLine("Binary: index " + indexBin + ", porownania " + compBin);
+        Console.WriteLine("Linear: index " + indexLin + ", porownania " + compLin);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

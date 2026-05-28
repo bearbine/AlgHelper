@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.7 - Linear Search z wartownikiem</Title>
+      <Shortcut>alg_37_liniowe_wartownik</Shortcut>
+      <Description>Wyszukiwanie liniowe z wartownikiem na końcu tablicy.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static int LinearSearchSentinel(int[] arr, int target, out int comparisons)
+    {
+        comparisons = 0;
+        int n = arr.Length;
+        int last = arr[n - 1];
+
+        arr[n - 1] = target; // wartownik
+
+        int i = 0;
+        while (arr[i] != target)
+        {
+            comparisons++;
+            i++;
+        }
+
+        comparisons++;
+        arr[n - 1] = last;
+
+        if (i < n - 1 || arr[n - 1] == target)
+        {
+            return i;
+        }
+
+        return -1;
+    }
+
+    static void Test(int[] data, int target)
+    {
+        int[] arr = (int[])data.Clone();
+        int index = LinearSearchSentinel(arr, target, out int comparisons);
+        Console.WriteLine("Szukana: " + target + ", index: " + index + ", porownania: " + comparisons);
+    }
+
+    static void Main()
+    {
+        int[] arr = { 4, 7, 2, 9, 5 };
+
+        Test(arr, 4);
+        Test(arr, 9);
+        Test(arr, 6);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

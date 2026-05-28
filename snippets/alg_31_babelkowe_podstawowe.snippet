@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 3.1 - Bubble Sort podstawowy</Title>
+      <Shortcut>alg_31_babelkowe_podstawowe</Shortcut>
+      <Description>Sortowanie bąbelkowe bez optymalizacji, z porównaniami i zamianami.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+
+class Program
+{
+    static void BubbleSort(int[] arr, out int comparisons, out int swaps)
+    {
+        comparisons = 0;
+        swaps = 0;
+
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            for (int j = 0; j < arr.Length - 1 - i; j++)
+            {
+                comparisons++;
+
+                if (arr[j] > arr[j + 1])
+                {
+                    int tmp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = tmp;
+                    swaps++;
+                }
+            }
+        }
+    }
+
+    static void Test(string name, int[] data)
+    {
+        int[] arr = (int[])data.Clone();
+
+        Console.WriteLine(name);
+        Console.WriteLine("Przed: " + string.Join(" ", arr));
+
+        BubbleSort(arr, out int comparisons, out int swaps);
+
+        Console.WriteLine("Po:    " + string.Join(" ", arr));
+        Console.WriteLine("Porownania: " + comparisons + ", zamiany: " + swaps);
+        Console.WriteLine();
+    }
+
+    static void Main()
+    {
+        Test("Optymistyczny", new int[] { 1, 2, 3, 4, 5 });
+        Test("Sredni", new int[] { 3, 1, 4, 2, 5 });
+        Test("Pesymistyczny", new int[] { 5, 4, 3, 2, 1 });
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

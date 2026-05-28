@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.3 - Kolejka priorytetowa z czasem</Title>
+      <Shortcut>alg_63_kolejka_czas</Shortcut>
+      <Description>Priorytet i czas dodania, gdy dwa zadania mają ten sam priorytet.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Zadanie
+{
+    public string Opis { get; set; }
+    public int Priorytet { get; set; }
+    public DateTime CzasDodania { get; set; }
+
+    public Zadanie(string opis, int priorytet, DateTime czasDodania)
+    {
+        Opis = opis;
+        Priorytet = priorytet;
+        CzasDodania = czasDodania;
+    }
+}
+
+public class PorownywaczZadan : IComparer<Zadanie>
+{
+    public int Compare(Zadanie x, Zadanie y)
+    {
+        // najpierw priorytet, a przy remisie wcześniejszy czas
+        if (x.Priorytet != y.Priorytet)
+        {
+            return y.Priorytet.CompareTo(x.Priorytet);
+        }
+
+        return x.CzasDodania.CompareTo(y.CzasDodania);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        PriorityQueue<Zadanie, Zadanie> kolejkaPriorytetowa =
+            new PriorityQueue<Zadanie, Zadanie>(new PorownywaczZadan());
+
+        Zadanie t1 = new Zadanie("Sprawozdanie", 2, DateTime.Now);
+        Zadanie t2 = new Zadanie("Kolokwium", 5, DateTime.Now.AddSeconds(1));
+        Zadanie t3 = new Zadanie("Projekt", 3, DateTime.Now.AddSeconds(2));
+        Zadanie t4 = new Zadanie("Pilne zgłoszenie", 5, DateTime.Now.AddSeconds(3));
+        Zadanie t5 = new Zadanie("Notatki", 1, DateTime.Now.AddSeconds(4));
+
+        kolejkaPriorytetowa.Enqueue(t1, t1);
+        kolejkaPriorytetowa.Enqueue(t2, t2);
+        kolejkaPriorytetowa.Enqueue(t3, t3);
+        kolejkaPriorytetowa.Enqueue(t4, t4);
+        kolejkaPriorytetowa.Enqueue(t5, t5);
+
+        while (kolejkaPriorytetowa.Count > 0)
+        {
+            Zadanie zadanie = kolejkaPriorytetowa.Dequeue();
+            Console.WriteLine($"{zadanie.Opis} | priorytet: {zadanie.Priorytet} | czas: {zadanie.CzasDodania}");
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

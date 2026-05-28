@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.9 - Palindrom</Title>
+      <Shortcut>alg_59_palindrom</Shortcut>
+      <Description>Sprawdzenie palindromu przez stos i kolejkę.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static bool CzyPalindrom(string tekst)
+    {
+        Stack<char> stos = new Stack<char>();
+        Queue<char> kolejka = new Queue<char>();
+
+        foreach (char znak in tekst)
+        {
+            stos.Push(znak);
+            kolejka.Enqueue(znak);
+        }
+
+        while (stos.Count > 0)
+        {
+            if (stos.Pop() != kolejka.Dequeue())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static void Main()
+    {
+        Console.Write("Podaj wyraz: ");
+        string tekst = Console.ReadLine();
+
+        Console.WriteLine(CzyPalindrom(tekst) ? "Palindrom" : "Nie palindrom");
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

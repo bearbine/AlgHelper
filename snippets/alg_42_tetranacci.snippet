@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 4.2 - Ciąg Tetranacciego</Title>
+      <Shortcut>alg_42_tetranacci</Shortcut>
+      <Description>Tetranacci w kilku wersjach: rec, memo, bottom-up i tail.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static int TetraRec(int n)
+    {
+        if (n < 3) return 0;
+        if (n == 3) return 1;
+        return TetraRec(n - 1) + TetraRec(n - 2) + TetraRec(n - 3) + TetraRec(n - 4);
+    }
+
+    static int TetraMemo(int n, Dictionary<int, int> memo)
+    {
+        if (memo.ContainsKey(n)) return memo[n];
+
+        memo[n] = TetraMemo(n - 1, memo) + TetraMemo(n - 2, memo) + TetraMemo(n - 3, memo) + TetraMemo(n - 4, memo);
+        return memo[n];
+    }
+
+    static int TetraBottomUp(int n)
+    {
+        if (n < 3) return 0;
+        if (n == 3) return 1;
+
+        int a = 0, b = 0, c = 0, d = 1;
+
+        for (int i = 4; i <= n; i++)
+        {
+            int current = a + b + c + d;
+            a = b;
+            b = c;
+            c = d;
+            d = current;
+        }
+
+        return d;
+    }
+
+    static int TetraTail(int n, int a = 0, int b = 0, int c = 0, int d = 1)
+    {
+        if (n == 0) return a;
+        if (n == 1) return b;
+        if (n == 2) return c;
+        if (n == 3) return d;
+        return TetraTail(n - 1, b, c, d, a + b + c + d);
+    }
+
+    static void Main()
+    {
+        int n = 7;
+        var memo = new Dictionary<int, int> { [0] = 0, [1] = 0, [2] = 0, [3] = 1 };
+
+        Console.WriteLine("Rec: " + TetraRec(n));
+        Console.WriteLine("Memo: " + TetraMemo(n, memo));
+        Console.WriteLine("Bottom-up: " + TetraBottomUp(n));
+        Console.WriteLine("Tail: " + TetraTail(n));
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

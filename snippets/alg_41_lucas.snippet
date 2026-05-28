@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 4.1 - Ciąg Lucasa</Title>
+      <Shortcut>alg_41_lucas</Shortcut>
+      <Description>Lucas: rekurencja, memoizacja, bottom-up i wersja ogonowa.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static int LucasRec(int n)
+    {
+        if (n == 0) return 2;
+        if (n == 1) return 1;
+        return LucasRec(n - 1) + LucasRec(n - 2);
+    }
+
+    static int LucasMemo(int n, Dictionary<int, int> memo)
+    {
+        if (memo.ContainsKey(n)) return memo[n];
+
+        memo[n] = LucasMemo(n - 1, memo) + LucasMemo(n - 2, memo);
+        return memo[n];
+    }
+
+    static int LucasBottomUp(int n)
+    {
+        if (n == 0) return 2;
+        if (n == 1) return 1;
+
+        int prev2 = 2;
+        int prev1 = 1;
+
+        for (int i = 2; i <= n; i++)
+        {
+            int current = prev1 + prev2;
+            prev2 = prev1;
+            prev1 = current;
+        }
+
+        return prev1;
+    }
+
+    static int LucasTail(int n, int a = 2, int b = 1)
+    {
+        if (n == 0) return a;
+        if (n == 1) return b;
+        return LucasTail(n - 1, b, a + b);
+    }
+
+    static int CountCallsLucas(int n)
+    {
+        if (n == 0 || n == 1) return 1;
+        return 1 + CountCallsLucas(n - 1) + CountCallsLucas(n - 2);
+    }
+
+    static void Main()
+    {
+        int n = 5;
+        var memo = new Dictionary<int, int> { [0] = 2, [1] = 1 };
+
+        Console.WriteLine("Rec: " + LucasRec(n));
+        Console.WriteLine("Memo: " + LucasMemo(n, memo));
+        Console.WriteLine("Bottom-up: " + LucasBottomUp(n));
+        Console.WriteLine("Tail: " + LucasTail(n));
+        Console.WriteLine("Wywolania rec dla n=5: " + CountCallsLucas(5));
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

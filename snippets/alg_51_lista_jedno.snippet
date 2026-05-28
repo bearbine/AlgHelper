@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 5.1 - Lista jednokierunkowa</Title>
+      <Shortcut>alg_51_lista_jedno</Shortcut>
+      <Description>Lista jednokierunkowa: dodawanie, usuwanie, szukanie i wypisanie.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+public class ListaJednokierunkowa
+{
+    private class Node
+    {
+        public int Value;
+        public Node Next;
+
+        public Node(int value)
+        {
+            Value = value;
+            Next = null;
+        }
+    }
+
+    private Node head;
+
+    public bool CzyPusta()
+    {
+        return head == null;
+    }
+
+    public void DodajNaPoczatek(int value)
+    {
+        Node newNode = new Node(value);
+        newNode.Next = head;
+        head = newNode;
+    }
+
+    public void DodajNaKoniec(int value)
+    {
+        Node newNode = new Node(value);
+
+        if (head == null)
+        {
+            head = newNode;
+            return;
+        }
+
+        Node current = head;
+
+        while (current.Next != null)
+        {
+            current = current.Next;
+        }
+
+        current.Next = newNode;
+    }
+
+    public void UsunPierwszy()
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        head = head.Next;
+    }
+
+    public void Usun(int value)
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        if (head.Value == value)
+        {
+            head = head.Next;
+            return;
+        }
+
+        Node current = head;
+
+        while (current.Next != null && current.Next.Value != value)
+        {
+            current = current.Next;
+        }
+
+        if (current.Next != null)
+        {
+            current.Next = current.Next.Next;
+        }
+    }
+
+    public bool Zawiera(int value)
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            if (current.Value == value)
+            {
+                return true;
+            }
+
+            current = current.Next;
+        }
+
+        return false;
+    }
+
+    public void Wypisz()
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            System.Console.Write(current.Value + " ");
+            current = current.Next;
+        }
+
+        System.Console.WriteLine();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ListaJednokierunkowa lista = new ListaJednokierunkowa();
+
+        System.Console.WriteLine("Czy pusta na start: " + lista.CzyPusta());
+
+        lista.DodajNaPoczatek(10);
+        lista.DodajNaPoczatek(5);
+        lista.DodajNaKoniec(20);
+
+        System.Console.WriteLine("Po DodajNaPoczatek(10), DodajNaPoczatek(5), DodajNaKoniec(20):");
+        lista.Wypisz();
+
+        System.Console.WriteLine("Zawiera(10): " + lista.Zawiera(10));
+
+        lista.Usun(10);
+        System.Console.WriteLine("Po Usun(10):");
+        lista.Wypisz();
+
+        lista.UsunPierwszy();
+        System.Console.WriteLine("Po UsunPierwszy():");
+        lista.Wypisz();
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

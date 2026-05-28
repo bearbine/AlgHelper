@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.6 - Najkrótsze drogi między miastami</Title>
+      <Shortcut>alg_76_drogi_miasta</Shortcut>
+      <Description>Dijkstra dla miast, razem z odtworzeniem trasy.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Krawedz
+{
+    public string Cel;
+    public int Waga;
+
+    public Krawedz(string cel, int waga)
+    {
+        Cel = cel;
+        Waga = waga;
+    }
+}
+
+public class Program
+{
+    static void NajkrotszeDrogi(
+        Dictionary<string, List<Krawedz>> graf,
+        string start,
+        out Dictionary<string, int> odleglosci,
+        out Dictionary<string, string> poprzednik)
+    {
+        odleglosci = new Dictionary<string, int>();
+        poprzednik = new Dictionary<string, string>();
+
+        foreach (string miasto in graf.Keys)
+        {
+            odleglosci[miasto] = int.MaxValue;
+            poprzednik[miasto] = null;
+        }
+
+        odleglosci[start] = 0;
+
+        PriorityQueue<string, int> pq = new PriorityQueue<string, int>();
+        pq.Enqueue(start, 0);
+
+        while (pq.Count > 0)
+        {
+            pq.TryDequeue(out string current, out int aktualnaOdleglosc);
+
+            if (aktualnaOdleglosc > odleglosci[current])
+            {
+                continue;
+            }
+
+            foreach (Krawedz krawedz in graf[current])
+            {
+                int nowaOdleglosc = odleglosci[current] + krawedz.Waga;
+
+                if (nowaOdleglosc < odleglosci[krawedz.Cel])
+                {
+                    odleglosci[krawedz.Cel] = nowaOdleglosc;
+                    poprzednik[krawedz.Cel] = current; // do odtworzenia trasy
+                    pq.Enqueue(krawedz.Cel, nowaOdleglosc);
+                }
+            }
+        }
+    }
+
+    static void WypiszSciezke(Dictionary<string, string> poprzednik, string target)
+    {
+        Stack<string> sciezka = new Stack<string>();
+        string current = target;
+
+        while (current != null)
+        {
+            sciezka.Push(current);
+            current = poprzednik[current];
+        }
+
+        Console.WriteLine(string.Join(" -> ", sciezka));
+    }
+
+    public static void Main()
+    {
+        Dictionary<string, List<Krawedz>> graf = new Dictionary<string, List<Krawedz>>();
+
+        graf["Lublin"] = new List<Krawedz>() { new Krawedz("Warszawa", 170), new Krawedz("Rzeszow", 160), new Krawedz("Kielce", 190) };
+        graf["Warszawa"] = new List<Krawedz>() { new Krawedz("Lublin", 170), new Krawedz("Lodz", 130) };
+        graf["Rzeszow"] = new List<Krawedz>() { new Krawedz("Lublin", 160), new Krawedz("Krakow", 170) };
+        graf["Kielce"] = new List<Krawedz>() { new Krawedz("Lublin", 190), new Krawedz("Krakow", 120), new Krawedz("Lodz", 160) };
+        graf["Lodz"] = new List<Krawedz>() { new Krawedz("Warszawa", 130), new Krawedz("Kielce", 160), new Krawedz("Krakow", 210) };
+        graf["Krakow"] = new List<Krawedz>() { new Krawedz("Rzeszow", 170), new Krawedz("Kielce", 120), new Krawedz("Lodz", 210) };
+
+        NajkrotszeDrogi(graf, "Lublin", out Dictionary<string, int> odleglosci, out Dictionary<string, string> poprzednik);
+
+        foreach (string miasto in graf.Keys)
+        {
+            Console.WriteLine("Miasto: " + miasto + ", dystans: " + odleglosci[miasto]);
+            Console.Write("Trasa: ");
+            WypiszSciezke(poprzednik, miasto);
+            Console.WriteLine();
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

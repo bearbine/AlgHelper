@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 6.5 - Scalanie k tablic</Title>
+      <Shortcut>alg_65_scal_tablice</Shortcut>
+      <Description>Scalanie kilku posortowanych tablic przez PriorityQueue.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class InfoElementu
+{
+    public int Value;
+    public int IndeksTablicy;
+    public int IndeksElementu;
+
+    public InfoElementu(int value, int indeksTablicy, int indeksElementu)
+    {
+        Value = value;
+        IndeksTablicy = indeksTablicy;
+        IndeksElementu = indeksElementu;
+    }
+}
+
+class Program
+{
+    static List<int> ScalPosortowaneTablice(int[][] tablice)
+    {
+        PriorityQueue<InfoElementu, int> pq = new PriorityQueue<InfoElementu, int>();
+        List<int> wynik = new List<int>();
+
+        for (int i = 0; i < tablice.Length; i++)
+        {
+            if (tablice[i].Length > 0)
+            {
+                InfoElementu element = new InfoElementu(tablice[i][0], i, 0);
+                pq.Enqueue(element, element.Value);
+            }
+        }
+
+        while (pq.Count > 0)
+        {
+            InfoElementu current = pq.Dequeue();
+            // bierzemy najmniejszy aktualny element z którejś tablicy
+            wynik.Add(current.Value);
+
+            int nastepnyIndeks = current.IndeksElementu + 1;
+
+            if (nastepnyIndeks < tablice[current.IndeksTablicy].Length)
+            {
+                int nastepnaWartosc = tablice[current.IndeksTablicy][nastepnyIndeks];
+                InfoElementu nastepnyElement = new InfoElementu(nastepnaWartosc, current.IndeksTablicy, nastepnyIndeks);
+                pq.Enqueue(nastepnyElement, nastepnyElement.Value);
+            }
+        }
+
+        return wynik;
+    }
+
+    static void Main()
+    {
+        int[][] tablice =
+        {
+            new int[] { 1, 4, 7 },
+            new int[] { 2, 5, 8 },
+            new int[] { 0, 3, 9 }
+        };
+
+        Console.WriteLine(string.Join(" ", ScalPosortowaneTablice(tablice)));
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

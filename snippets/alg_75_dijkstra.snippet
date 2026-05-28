@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.5 - Najkrótsze ścieżki Dijkstry</Title>
+      <Shortcut>alg_75_dijkstra</Shortcut>
+      <Description>Dijkstra, najkrótsze drogi od startu.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Krawedz
+{
+    public string Cel;
+    public int Waga;
+
+    public Krawedz(string cel, int waga)
+    {
+        Cel = cel;
+        Waga = waga;
+    }
+}
+
+class Program
+{
+    static Dictionary<string, int> NajkrotszeDrogi(Dictionary<string, List<Krawedz>> graf, string start)
+    {
+        Dictionary<string, int> odleglosci = new Dictionary<string, int>();
+
+        foreach (string wierzcholek in graf.Keys)
+        {
+            odleglosci[wierzcholek] = int.MaxValue;
+        }
+
+        odleglosci[start] = 0;
+
+        PriorityQueue<string, int> pq = new PriorityQueue<string, int>();
+        pq.Enqueue(start, 0);
+
+        while (pq.Count > 0)
+        {
+            pq.TryDequeue(out string current, out int aktualnaOdleglosc);
+
+            // starszy wpis w kolejce, można go pominąć
+            if (aktualnaOdleglosc > odleglosci[current])
+            {
+                continue;
+            }
+
+            foreach (Krawedz krawedz in graf[current])
+            {
+                int nowaOdleglosc = odleglosci[current] + krawedz.Waga;
+
+                // relaksacja krawędzi
+                if (nowaOdleglosc < odleglosci[krawedz.Cel])
+                {
+                    odleglosci[krawedz.Cel] = nowaOdleglosc;
+                    pq.Enqueue(krawedz.Cel, nowaOdleglosc);
+                }
+            }
+        }
+
+        return odleglosci;
+    }
+
+    static void Main()
+    {
+        Dictionary<string, List<Krawedz>> graf = new Dictionary<string, List<Krawedz>>();
+
+        graf["A"] = new List<Krawedz>() { new Krawedz("B", 4), new Krawedz("C", 2) };
+        graf["B"] = new List<Krawedz>() { new Krawedz("C", 1), new Krawedz("D", 5) };
+        graf["C"] = new List<Krawedz>() { new Krawedz("D", 8), new Krawedz("E", 10) };
+        graf["D"] = new List<Krawedz>() { new Krawedz("E", 2) };
+        graf["E"] = new List<Krawedz>();
+
+        Dictionary<string, int> odleglosci = NajkrotszeDrogi(graf, "A");
+
+        foreach (var wpis in odleglosci)
+        {
+            Console.WriteLine(wpis.Key + ": " + wpis.Value);
+        }
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

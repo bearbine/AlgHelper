@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Lab 7.6 - Kruskal</Title>
+      <Shortcut>alg_76_kruskal</Shortcut>
+      <Description>Kruskal i zbiory rozłączne do MST.</Description>
+      <Author>bearbine</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[
+using System;
+using System.Collections.Generic;
+
+public class Krawedz
+{
+    public string Zrodlo;
+    public string Cel;
+    public int Waga;
+
+    public Krawedz(string zrodlo, string cel, int waga)
+    {
+        Zrodlo = zrodlo;
+        Cel = cel;
+        Waga = waga;
+    }
+}
+
+public class ZbioryRozlaczne
+{
+    private Dictionary<string, string> rodzic = new Dictionary<string, string>();
+
+    public void UtworzZbior(string wierzcholek)
+    {
+        rodzic[wierzcholek] = wierzcholek;
+    }
+
+    public string Znajdz(string wierzcholek)
+    {
+        if (rodzic[wierzcholek] != wierzcholek)
+        {
+            rodzic[wierzcholek] = Znajdz(rodzic[wierzcholek]);
+        }
+
+        return rodzic[wierzcholek];
+    }
+
+    public void Polacz(string a, string b)
+    {
+        string korzenA = Znajdz(a);
+        string korzenB = Znajdz(b);
+
+        if (korzenA != korzenB)
+        {
+            rodzic[korzenB] = korzenA;
+        }
+    }
+}
+
+class Program
+{
+    static List<Krawedz> Kruskal(List<string> wierzcholki, List<Krawedz> krawedzie)
+    {
+        List<Krawedz> drzewo = new List<Krawedz>();
+        ZbioryRozlaczne uf = new ZbioryRozlaczne();
+
+        foreach (string wierzcholek in wierzcholki)
+        {
+            uf.UtworzZbior(wierzcholek);
+        }
+
+        // najpierw najlżejsze krawędzie
+        krawedzie.Sort((a, b) => a.Waga.CompareTo(b.Waga));
+
+        foreach (Krawedz krawedz in krawedzie)
+        {
+            // dodajemy tylko, gdy nie zrobi cyklu
+            if (uf.Znajdz(krawedz.Zrodlo) != uf.Znajdz(krawedz.Cel))
+            {
+                drzewo.Add(krawedz);
+                uf.Polacz(krawedz.Zrodlo, krawedz.Cel);
+            }
+        }
+
+        return drzewo;
+    }
+
+    static void Main()
+    {
+        List<string> wierzcholki = new List<string>() { "A", "B", "C", "D", "E" };
+
+        List<Krawedz> krawedzie = new List<Krawedz>()
+        {
+            new Krawedz("B", "C", 1),
+            new Krawedz("A", "C", 2),
+            new Krawedz("D", "E", 2),
+            new Krawedz("A", "B", 4),
+            new Krawedz("B", "D", 5),
+            new Krawedz("C", "D", 8),
+            new Krawedz("C", "E", 10)
+        };
+
+        List<Krawedz> drzewo = Kruskal(wierzcholki, krawedzie);
+        int kosztCalkowity = 0;
+
+        foreach (Krawedz krawedz in drzewo)
+        {
+            Console.WriteLine($"{krawedz.Zrodlo} - {krawedz.Cel}, waga: {krawedz.Waga}");
+            kosztCalkowity += krawedz.Waga;
+        }
+
+        Console.WriteLine("Koszt: " + kosztCalkowity);
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
